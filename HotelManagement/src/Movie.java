@@ -4,7 +4,7 @@
 public class Movie {
 
 	private static final int CHILDREN = 2;
-	private static final int NEW_RELEASE = 1;
+	private static final int NEWRELEASE = 1;
 	private static final int REGULAR = 0;
 
 	private String _title;
@@ -34,7 +34,7 @@ public class Movie {
 			if (daysRented > 2)
 				result += (daysRented - 2) * 1.5;
 			break;
-		case NEW_RELEASE:
+		case NEWRELEASE:
 			result += daysRented * 3;
 			break;
 		case CHILDREN:
@@ -57,11 +57,11 @@ public class Movie {
 	}
 
 	public static Movie createNewReleaseMovie(String title) {
-		return new Movie(title, NEW_RELEASE);
+		return new Movie(title, NEWRELEASE);
 	}
 
 	public int getRenterPoints(int daysRented) {
-		if ((getPriceCode() == Movie.NEW_RELEASE) && daysRented > 1)  return 2;
+		if ((getPriceCode() == Movie.NEWRELEASE) && daysRented > 1)  return 2;
 		else return 1;
 	}
 
