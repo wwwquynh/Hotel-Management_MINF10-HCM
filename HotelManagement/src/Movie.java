@@ -3,7 +3,7 @@
 
 public class Movie {
 
-	private static final int CHILDREN = 2;
+	private static final int CHILDRENS = 2;
 	private static final int NEWRELEASE = 1;
 	private static final int REGULAR = 0;
 
@@ -37,7 +37,7 @@ public class Movie {
 		case NEWRELEASE:
 			result += daysRented * 3;
 			break;
-		case CHILDREN:
+		case CHILDRENS:
 			result += 1.5;
 			if (daysRented > 3)
 				result += (daysRented - 3) * 1.5;
@@ -49,7 +49,7 @@ public class Movie {
 	
 
 	public static Movie createChildrenMovie(String title) {
-		return new Movie(title, CHILDREN);
+		return new Movie(title, CHILDRENS);
 	}
 
 	public static Movie createRegularMovie(String title) {
