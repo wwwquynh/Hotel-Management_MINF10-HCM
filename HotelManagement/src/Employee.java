@@ -6,4 +6,5 @@ public interface Employee {
 	public Employee getEmployee(int empID);
 	public ArrayList<Employee> searchEmployee();
 	public int updateCustomer(Employee e);
+	public int updateStatus(int status);
 }
