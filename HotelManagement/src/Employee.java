@@ -5,7 +5,8 @@ public interface Employee {
 	public int addEmployee(Employee e);
 	public Employee getEmployee(int empID);
 	public ArrayList<Employee> searchEmployee();
-	public int updateCustomer(Employee e);
+	public int updateEmployee(Employee e);
 	public int updateStatus(int status);
 	public int assignTask(ArrayList<Task> tasks);
+
 }
