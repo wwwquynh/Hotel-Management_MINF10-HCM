@@ -1,13 +1,30 @@
 package business;
 
 import java.util.ArrayList;
+import java.util.Date;
+
+import connect.sqlite.ConnectData;
 
 public class CEmployee implements Employee{
 
+	String empName = "";
+	String empUserName = "";
+	String empPass = "";
+	Date empDOB = null;
+	String empAddress = "";
+	String empPhone = "";
+	double empSalary = 0;
+	ConnectData conn;
+	public CEmployee(){
+		
+	}
 	@Override
-	public int addEmployee(Employee e) {
+	public boolean addEmployee() {
 		// TODO Auto-generated method stub
-		return 0;
+		conn = new ConnectData();
+		conn.connect();
+		String sql ="insert into Employee values(null, \""+ empName +"\", \"" + empAddress + "\", \""  + empPhone + "\"," + "null, null,\""+empUserName+"\", \"" + empPass +"\")";
+		return conn.queryExcuteUpdate(sql);
 	}
 
 	@Override
