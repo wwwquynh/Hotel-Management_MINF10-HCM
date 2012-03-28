@@ -155,13 +155,18 @@ public class Employee implements IEmployee{
 		conn.connect();
 		boolean isOk = conn.queryExcuteUpdate(sql);
 		if(isOk){
+			/*
 			for(ITask t:tasks)
 			{
 				
 			}
+			*/
 		}
 		
 		return 0;
 	}
-
+	
+	public static ResultSet searchEmployee(String empName){
+		return null;
+	}
 }
