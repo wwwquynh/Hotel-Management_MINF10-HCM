@@ -1,3 +1,5 @@
+
+
 import java.util.Vector;
 
 //From book: 'Refactoring' by Martin Fowler
