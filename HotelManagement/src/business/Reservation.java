@@ -25,7 +25,79 @@ public class Reservation implements IReservation{
 	public Reservation(){
 		
 	}
-	
+	public Reservation(int resID){
+		try {
+			this.resID = resID;
+			String sql = "select  * from Reservation where resID = " + resID;
+			conn = new ConnectData();
+			conn.connect();
+			ResultSet rs = conn.ExcuteQuery(sql);
+		
+			while(rs.next()){
+				this.resID = resID;
+				this.customerID = rs.getInt("customerID");
+				this.resDate = rs.getDate("resDate");
+				this.resLeaveDate = rs.getDate("resLeaveDate");
+				this.preTotalCost = rs.getDouble("preTotalCost");
+				this.numberOfAdult = rs.getInt("numberOfAdult");
+				this.numberOfChild = rs.getInt("numberOfChild");
+				this.resStatus = rs.getInt("resStatus");
+			}
+			conn.dispose();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public int getResID() {
+		return resID;
+	}
+	public void setResID(int resID) {
+		this.resID = resID;
+	}
+	public int getCustomerID() {
+		return customerID;
+	}
+	public void setCustomerID(int customerID) {
+		this.customerID = customerID;
+	}
+	public Date getResDate() {
+		return resDate;
+	}
+	public void setResDate(Date resDate) {
+		this.resDate = resDate;
+	}
+	public Date getResLeaveDate() {
+		return resLeaveDate;
+	}
+	public void setResLeaveDate(Date resLeaveDate) {
+		this.resLeaveDate = resLeaveDate;
+	}
+	public double getPreTotalCost() {
+		return preTotalCost;
+	}
+	public void setPreTotalCost(double preTotalCost) {
+		this.preTotalCost = preTotalCost;
+	}
+	public int getNumberOfAdult() {
+		return numberOfAdult;
+	}
+	public void setNumberOfAdult(int numberOfAdult) {
+		this.numberOfAdult = numberOfAdult;
+	}
+	public int getNumberOfChild() {
+		return numberOfChild;
+	}
+	public void setNumberOfChild(int numberOfChild) {
+		this.numberOfChild = numberOfChild;
+	}
+	public int getResStatus() {
+		return resStatus;
+	}
+	public void setResStatus(int resStatus) {
+		this.resStatus = resStatus;
+	}
 	public Reservation(int resID, int customerID, Date resDate, Date resLeaveDate, double preTotalCost, int numberOfAdult, int numberOfChild, int resStatus){
 		this.resID = resID;
 		this.customerID = customerID;
