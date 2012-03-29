@@ -118,7 +118,7 @@ public class Reservation implements IReservation{
 		this.resStatus = resStatus;
 	}
 	@Override
-	public boolean addReservation() {
+	public int addReservation() {
 		// TODO Auto-generated method stub
 		ArrayList<SQLItem> items = new ArrayList<SQLItem>();
 		items.add(new SQLItem(1, "resID", null));
@@ -133,14 +133,14 @@ public class Reservation implements IReservation{
 		System.out.println(sql);
 		conn = new ConnectData();
 		conn.connect();
-		boolean isOk = conn.queryExcuteUpdate(sql);
+		int reID = conn.queryExcuteUpdateGenerateKey(sql);
 		try {
 			conn.dispose();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return isOk;
+		return reID;
 
 	}
 
