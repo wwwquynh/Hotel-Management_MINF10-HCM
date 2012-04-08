@@ -29,6 +29,6 @@ public class ReservationTest {
 	public void testGenerateError2(){
 		Reservation resv = new Reservation(1);//select from database
 		assertEquals(3, resv.getCustomerID());
-		assertEquals(6, resv.getNumberOfChild());//http://wiki.cloudbees.com/bin/view/DEV/How+to+use+Private+GitHub+Repositories+with+CloudBees
+		assertEquals(6, resv.getNumberOfChild());// http://wiki.cloudbees.com/bin/view/DEV/How+to+use+Private+GitHub+Repositories+with+CloudBees
 	}
 }
