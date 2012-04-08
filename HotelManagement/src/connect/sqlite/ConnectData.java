@@ -9,7 +9,7 @@ public class ConnectData{
 	public Connection conn = null;	
 	public void connect(){
 		try{
-			String url="jdbc:sqlite:d:\\Phuong\\hotel.s3db";
+			String url="jdbc:sqlite:E:\\HotelManagementProj\\hotel.s3db";
 			Class.forName("org.sqlite.JDBC");
 			conn = DriverManager.getConnection (url);
 			if(conn!=null)
@@ -43,6 +43,29 @@ public class ConnectData{
 		}
 		return rs;
 	}
+	
+	public int queryExcuteUpdateGenerateKey(String sql) {
+
+		try{
+			Statement stmt=	conn.createStatement();
+
+			int reKey = -1;
+			if(stmt.executeUpdate(sql) == 1)
+			{
+				
+				ResultSet rs = stmt.getGeneratedKeys();
+				while(rs.next()){
+					reKey = (Integer) rs.getObject("last_insert_rowid()");
+				}
+			}
+				return reKey;
+		}
+		catch(Exception e){
+			System.out.print("Unsuccess!");
+		}
+		return -1;
+	}
+	
 	public void dispose() throws SQLException{
 		conn.close();
 	}
