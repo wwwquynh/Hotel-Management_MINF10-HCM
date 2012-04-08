@@ -25,4 +25,10 @@ public class ReservationTest {
 		assertEquals(3, resv.getCustomerID());
 		assertEquals(6, resv.getNumberOfChild());
 	}
+	@Test 
+	public void testGenerateError2(){
+		Reservation resv = new Reservation(1);//select from database
+		assertEquals(3, resv.getCustomerID());
+		assertEquals(6, resv.getNumberOfChild());
+	}
 }
