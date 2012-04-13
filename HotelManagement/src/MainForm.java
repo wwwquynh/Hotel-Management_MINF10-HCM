@@ -30,9 +30,7 @@ import windowsform.RoomStatusForm;
 
 import formcontroller.*;
 public class MainForm extends JFrame {
-  /**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 public MDIDesktopPane desktop = new MDIDesktopPane();
