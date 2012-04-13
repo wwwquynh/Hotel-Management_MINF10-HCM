@@ -1,6 +1,4 @@
 package formcontroller;
-
-
 import java.awt.Dimension;
 import java.awt.Insets;
 
