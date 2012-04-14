@@ -123,8 +123,8 @@ public class Reservation implements IReservation{
 		ArrayList<SQLItem> items = new ArrayList<SQLItem>();
 		items.add(new SQLItem(1, "resID", null));
 		items.add(new SQLItem(1, "customerID", customerID));
-		items.add(new SQLItem(1, "resDate", resDate));
-		items.add(new SQLItem(1, "resLeaveDate", resLeaveDate));
+		items.add(new SQLItem(2, "resDate", resDate));
+		items.add(new SQLItem(2, "resLeaveDate", resLeaveDate));
 		items.add(new SQLItem(1, "preTotalCost", preTotalCost));
 		items.add(new SQLItem(1, "numberOfAdult", numberOfAdult));
 		items.add(new SQLItem(1, "numberOfChild", numberOfChild));
