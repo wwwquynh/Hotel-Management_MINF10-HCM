@@ -19,6 +19,7 @@ public class RoomStatusForm extends JInternalFrame {
 	/**
 	 *
 	 */
+	private int selectedRoomID;
 	MDIDesktopPane desktop;
 	private static final long serialVersionUID = 1L;
   GridLayout gridLayout1 = new GridLayout();
@@ -101,6 +102,7 @@ public class RoomStatusForm extends JInternalFrame {
 
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
+				selectedRoomID = rCont.room.getRoomID();
 				if(e.isPopupTrigger()){
 					RoomControl rc = (RoomControl)e.getComponent();
 					switch(rc.room.getRoomStatusID()){
@@ -140,7 +142,8 @@ public class RoomStatusForm extends JInternalFrame {
 
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				System.out.println(rCont.room.getRoomID());
+				selectedRoomID = rCont.room.getRoomID();
+				//System.out.println();
 			}
 		});
 
@@ -227,11 +230,12 @@ public class RoomStatusForm extends JInternalFrame {
     miRes.addActionListener(new ActionListener() {
 
 		public void actionPerformed(ActionEvent arg0) {
-
-			ReservationForm res = new ReservationForm();
+			
+			ReservationForm res = new ReservationForm(desktop, selectedRoomID);
 			desktop.add(res);
 		}
 	});
+    
   }
 
 }
