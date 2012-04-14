@@ -111,7 +111,7 @@ public class Room {
 				this.roomFloor = rs.getInt("roomFloor");
 				this.roomNoOfChild = rs.getInt("roomNoOfChild");
 				this.roomNoOfAdult = rs.getInt("roomNoOfAdult");
-				this.roomFee = rs.getDouble("empPassword");
+				this.roomFee = rs.getDouble("roomFee");
 				this.roomStatusID = rs.getInt("roomStatusID");
 			}
 			conn.dispose();
@@ -136,5 +136,12 @@ public class Room {
 		cnn.connect();
 		ResultSet rs = cnn.ExcuteQuery(sql);
 		return rs;
+	}
+	
+	public static void updateStatus(int roomID, int roomStatusID){
+		ConnectData cnn = new ConnectData();
+		String sql = "update Room set roomStatusID = " + roomStatusID;
+		cnn.connect();
+		cnn.queryExcuteUpdate(sql);	
 	}
 }
