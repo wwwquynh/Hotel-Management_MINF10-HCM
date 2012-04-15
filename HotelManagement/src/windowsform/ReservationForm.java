@@ -20,8 +20,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-
 
 public class ReservationForm extends JInternalFrame{
 
@@ -301,14 +299,14 @@ public class ReservationForm extends JInternalFrame{
 			//add reservation -> code
 			  //public Reservation(int resID, int customerID, Date resDate, Date resLeaveDate, double preTotalCost, int numberOfAdult, int numberOfChild, int resStatus)
 			  
-			  DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			  DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			 
 		      String checkin = dateFormat.format(dateCheckin.getDate());
 			  String checkout = dateFormat.format(dateCheckout.getDate());
 
 			  
-			  Reservation res = new Reservation(custID,  dateFormat.parse(checkin), dateFormat.parse(checkout), Double.parseDouble(txtTotalCost.getText()), Integer.parseInt(spNumOfAdult.getValue().toString()), Integer.parseInt(spNumOfChild.getValue().toString()), 1);
-			  resrvID = res.addReservation();
+			  resrvID =  Reservation.addReservationStat(custID,  checkin, checkout, Double.parseDouble(txtTotalCost.getText()), Integer.parseInt(spNumOfAdult.getValue().toString()), Integer.parseInt(spNumOfChild.getValue().toString()), 1);
+			
 
 			  //add reservation detail-> code
 			  //public ReservationDetail(int resID, int roomID)
@@ -316,7 +314,8 @@ public class ReservationForm extends JInternalFrame{
 			  resDetailID = resDet.addReservationDetail();
 			  //add resevation detail service
 			  int rowCount = tblExtraService.getModel().getRowCount();
-			  for(int i=0; i<rowCount; i++){
+			  for(int i=1; i<rowCount; i++){
+				  
 				  ReservationDetailService reDetSer = new ReservationDetailService(resDetailID, Integer.parseInt(tblExtraService.getModel().getValueAt(i, 0).toString()), 1);
 				  reDetSer.addReservationServiceDetail();
 			  }
@@ -326,7 +325,7 @@ public class ReservationForm extends JInternalFrame{
 			  System.out.println("ok las");
 	  }
 	  catch(Exception ex){
-		  
+		  System.out.println(ex.getMessage());
 	  }
   }
 
