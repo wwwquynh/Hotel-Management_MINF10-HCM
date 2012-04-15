@@ -1,5 +1,4 @@
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,10 +20,7 @@ import javax.swing.JTextArea;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
-import business.RoomStatus;
-
 import windowsform.LoginForm;
-import windowsform.Main_Room;
 import windowsform.ReservationForm;
 import windowsform.RoomStatusForm;
 
