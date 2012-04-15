@@ -140,7 +140,7 @@ public class Room {
 	
 	public static void updateStatus(int roomID, int roomStatusID){
 		ConnectData cnn = new ConnectData();
-		String sql = "update Room set roomStatusID = " + roomStatusID;
+		String sql = "update Room set roomStatusID = " + roomStatusID + " where roomID = " + roomID;
 		cnn.connect();
 		cnn.queryExcuteUpdate(sql);	
 	}

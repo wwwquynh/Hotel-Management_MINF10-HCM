@@ -23,14 +23,15 @@ public class ReservationDetailService {
 		conn = new ConnectData();
 		conn.connect();
 		
-		String sql ="insert into RoomStatus values(null, "+ resDetailID + ", " + serviceID + ", " + qtyOfService +")";
+		String sql ="insert into ReservationDetailServices values(null, "+ serviceID + ", " + qtyOfService + ", " + resDetailID +")";
+		System.out.println(sql);
 		int reID = conn.queryExcuteUpdateGenerateKey(sql);
 		this.resDetailServiceID = reID; 
 		try {
 			conn.dispose();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		return reID;
 	}

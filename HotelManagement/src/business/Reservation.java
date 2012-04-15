@@ -117,6 +117,32 @@ public class Reservation implements IReservation{
 		this.numberOfChild = numberOfChild;
 		this.resStatus = resStatus;
 	}
+	
+	public static int addReservationStat(int customerID, String resDate, String resLeaveDate, double preTotalCost, int numberOfAdult, int numberOfChild, int resStatus){
+		ConnectData conn;
+		ArrayList<SQLItem> items = new ArrayList<SQLItem>();
+		items.add(new SQLItem(1, "resID", null));
+		items.add(new SQLItem(1, "customerID", customerID));
+		items.add(new SQLItem(2, "resDate", resDate));
+		items.add(new SQLItem(2, "resLeaveDate", resLeaveDate));
+		items.add(new SQLItem(1, "preTotalCost", preTotalCost));
+		items.add(new SQLItem(1, "numberOfAdult", numberOfAdult));
+		items.add(new SQLItem(1, "numberOfChild", numberOfChild));
+		items.add(new SQLItem(1, "resStatus", resStatus));
+		String sql = SQLSupport.prepareAddSql("Reservation", items);
+		System.out.println(sql);
+		conn = new ConnectData();
+		conn.connect();
+		int reID = conn.queryExcuteUpdateGenerateKey(sql);
+		try {
+			conn.dispose();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+		return reID;
+	}
 	@Override
 	public int addReservation() {
 		// TODO Auto-generated method stub

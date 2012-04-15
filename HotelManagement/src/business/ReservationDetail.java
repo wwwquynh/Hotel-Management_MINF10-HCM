@@ -19,6 +19,7 @@ public class ReservationDetail {
 	public int addReservationDetail(){
 		int reID = -1;
 		String sql = "INSERT into ReservationDetail values(null, " + resID + ", " + roomID + ")";
+		System.out.println(sql);
 		conn = new ConnectData();
 		conn.connect();
 		reID = conn.queryExcuteUpdateGenerateKey(sql);
