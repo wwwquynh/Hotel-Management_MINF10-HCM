@@ -3,7 +3,7 @@ package business;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import src.connect.sqlite.ConnectData;
+import connect.sqlite.ConnectData;
 
 public class Task implements ITask{
 	int taskID;
