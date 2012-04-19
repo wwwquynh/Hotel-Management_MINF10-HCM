@@ -5,19 +5,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class ConnectData{
+public class ConnectData implements IConnectData{
 	public Connection conn = null;	
-	public void connect(){
+	public boolean connect(){
 		try{
-			String url="jdbc:sqlite:E:\\HotelManagementProj\\DB\\hotel.s3db";
+			String url="jdbc:sqlite:E:\\PUF\\M2\\phuong\\spm\\hotel.s3db";
 			Class.forName("org.sqlite.JDBC");
 			conn = DriverManager.getConnection (url);
 			if(conn!=null)
 				System.out.println ("Connected!");
+			return true;
 		}
 		catch (Exception e){
 			System.err.println ("Fail Connected!");
 		}
+		return false;
 	}
 	public boolean queryExcuteUpdate(String sql) {
 
