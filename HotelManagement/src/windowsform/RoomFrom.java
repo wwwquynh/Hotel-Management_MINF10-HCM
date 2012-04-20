@@ -125,13 +125,13 @@ public class RoomFrom extends JFrame {
 
 
 		final TextField txt_idroom = new TextField();
-		txt_idroom.setBounds(187, 58, 148, 22);
+		txt_idroom.setBounds(219, 58, 148, 22);
 
 		final TextField txt_Floor = new TextField();
-		txt_Floor.setBounds(187, 114, 148, 22);
+		txt_Floor.setBounds(219, 114, 148, 22);
 
 		final TextField txt_roomName = new TextField();
-		txt_roomName.setBounds(187, 86, 148, 22);
+		txt_roomName.setBounds(219, 86, 148, 22);
 
 		Label label = new Label("RoomID");
 		label.setBounds(56, 58, 84, 22);
@@ -145,25 +145,25 @@ public class RoomFrom extends JFrame {
 		final TextField txt_roomStatusID = new TextField();		
 		txt_roomStatusID.setEditable(false);
 
-		txt_roomStatusID.setBounds(187, 142, 32, 22);
+		txt_roomStatusID.setBounds(219, 142, 32, 22);
 
 		Label label_3 = new Label("RoomStatusID");
-		label_3.setBounds(56, 142, 101, 22);
+		label_3.setBounds(56, 142, 127, 22);
 
 		Label label_4 = new Label("roomNoOfAdult");
-		label_4.setBounds(56, 170, 84, 22);
+		label_4.setBounds(56, 170, 115, 22);
 
 		final TextField txt_roomNoOfAdult = new TextField();
-		txt_roomNoOfAdult.setBounds(187, 170, 148, 22);
+		txt_roomNoOfAdult.setBounds(219, 170, 148, 22);
 
 		final TextField txt_roomNoOfChild = new TextField();
-		txt_roomNoOfChild.setBounds(187, 198, 148, 22);
+		txt_roomNoOfChild.setBounds(219, 198, 148, 22);
 
 		Label label_5 = new Label("roomNoOfChild");
-		label_5.setBounds(56, 198, 85, 22);
+		label_5.setBounds(56, 198, 127, 22);
 
 		final TextField txt_roomFee = new TextField();
-		txt_roomFee.setBounds(187, 226, 148, 22);
+		txt_roomFee.setBounds(219, 226, 148, 22);
 
 		cb_roomStatusID = new JComboBox();
 		cb_roomStatusID.addMouseListener(new MouseAdapter() {
@@ -183,7 +183,7 @@ public class RoomFrom extends JFrame {
 				txt_roomStatusID.setText(statusID.toString());
 			}
 		});
-		cb_roomStatusID.setBounds(226, 144, 109, 20);
+		cb_roomStatusID.setBounds(258, 144, 109, 20);
 		contentPane.add(cb_roomStatusID);
 
 

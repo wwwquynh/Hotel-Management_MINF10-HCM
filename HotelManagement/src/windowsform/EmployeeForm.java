@@ -164,7 +164,7 @@ public class EmployeeForm extends JFrame implements IEmployeeType {
 		txt_Address.setColumns(10);
 
 		JLabel lblAddress = new JLabel("Address");
-		lblAddress.setBounds(10, 136, 46, 14);
+		lblAddress.setBounds(10, 136, 92, 14);
 		contentPane.add(lblAddress);
 
 		JLabel lblPhone = new JLabel("Phone");

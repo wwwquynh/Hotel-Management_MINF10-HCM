@@ -6,13 +6,19 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Font;
+import java.sql.ResultSet;
+import java.util.Vector;
+
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JButton;
+
+import connect.sqlite.ConnectData;
 
 public class AssignTaskForm extends JFrame {
 
@@ -20,17 +26,48 @@ public class AssignTaskForm extends JFrame {
 	private JTextField txt_ID;
 	private JTextField txt_empManager;
 	private JTextField txt_empAssign;
-	private JTable table;
+	private static JTable table;
 
+	
+	
 	/**
 	 * Launch the application.
 	 */
+	
+	public static void showTable() {
+		Vector<String> rowHeader = new Vector (); 				
+		rowHeader.add ("assignTaskID"); 
+		rowHeader.add ("empManager"); 
+		rowHeader.add ("empID"); 
+		
+		DefaultTableModel model = new DefaultTableModel(rowHeader,0);				
+		table.setModel(model); 				
+		ConnectData ds=new ConnectData();
+		ds.connect();			
+		String newSQL="SELECT * FROM AssignTask"; 
+		try { 
+			ResultSet rs =ds.ExcuteQuery(newSQL); 
+			Vector rowData; 				
+			if (rs != null) while (rs.next()){ 
+				rowData = new Vector() ; 
+				rowData.add (rs.getString("assignTaskID")); 
+				//rowData.add (String.valueOf(rs.getInt("roomName"))); 
+				rowData.add (rs.getString("empManager"));
+				rowData.add (rs.getString("empID")); 		
+				model.addRow(rowData); 
+			} 
+
+			rs.close(); ds.dispose(); 
+		} catch(Exception ex){System.out.println("Error : "+ex);}
+	}
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					AssignTaskForm frame = new AssignTaskForm();
 					frame.setVisible(true);
+					showTable();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -60,7 +97,7 @@ public class AssignTaskForm extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblMamager = new JLabel("Mamager");
-		lblMamager.setBounds(28, 81, 46, 14);
+		lblMamager.setBounds(28, 81, 74, 14);
 		contentPane.add(lblMamager);
 		
 		JLabel lblAssign = new JLabel("Assign");
@@ -68,18 +105,18 @@ public class AssignTaskForm extends JFrame {
 		contentPane.add(lblAssign);
 		
 		txt_ID = new JTextField();
-		txt_ID.setBounds(99, 40, 100, 20);
+		txt_ID.setBounds(112, 40, 320, 20);
 		contentPane.add(txt_ID);
 		txt_ID.setColumns(10);
 		
 		txt_empManager = new JTextField();
 		txt_empManager.setText("");
-		txt_empManager.setBounds(99, 78, 216, 20);
+		txt_empManager.setBounds(112, 78, 320, 20);
 		contentPane.add(txt_empManager);
 		txt_empManager.setColumns(10);
 		
 		txt_empAssign = new JTextField();
-		txt_empAssign.setBounds(99, 114, 333, 20);
+		txt_empAssign.setBounds(112, 114, 320, 20);
 		contentPane.add(txt_empAssign);
 		txt_empAssign.setColumns(10);
 		

@@ -34,11 +34,11 @@ import java.awt.event.KeyEvent;
 public class CustomerFrom extends JFrame implements ICustomer {
 
 	private JPanel contentPane;
-	private JTextField txt_ID;
-	private JTextField txt_Name;
-	private JTextField txt_Phone;
-	private JTextField txt_Address;
-	private JTextField txt_email;
+	private static JTextField txt_ID;
+	private static JTextField txt_Name;
+	private static JTextField txt_Phone;
+	private static JTextField txt_Address;
+	private static JTextField txt_email;
 	private static JTable table;
 
 	//
@@ -53,7 +53,7 @@ public class CustomerFrom extends JFrame implements ICustomer {
 					CustomerFrom frame = new CustomerFrom();
 					frame.setVisible(true);
 					showTable();
-					
+										
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -117,7 +117,7 @@ public class CustomerFrom extends JFrame implements ICustomer {
 			public void ancestorRemoved(AncestorEvent arg0) {
 			}
 		});
-		lblAddress.setBounds(26, 170, 46, 14);
+		lblAddress.setBounds(26, 170, 67, 14);
 		contentPane.add(lblAddress);
 		
 		JLabel lblEmail = new JLabel("Email");
@@ -372,7 +372,7 @@ public class CustomerFrom extends JFrame implements ICustomer {
 		return false;
 	}
 
-	public void updateField() {
+	public static void updateField() {
 		int row = table.getSelectedRow();
 		txt_ID.setText((String) table.getValueAt(row, 0));
 		txt_Name.setText((String) table.getValueAt(row, 1));
