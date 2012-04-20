@@ -22,14 +22,11 @@ public class RoomUTest {
 		ResultSet result = null;
 		String sql = "Select * from Room";
 		EasyMock.expect(mockconnection.connect()).andReturn(true);
-		EasyMock.expect(mockconnection.ExcuteQuery(sql)).andReturn(result);
-		
-		RoomManager obj = new RoomManager(mockconnection);
-		
+		EasyMock.expect(mockconnection.ExcuteQuery(sql)).andReturn(result);		
+		RoomManager obj = new RoomManager(mockconnection);		
 		EasyMock.replay(mockconnection);
 		obj.getAvailableRoom();
-		EasyMock.verify(mockconnection);
-		
+		EasyMock.verify(mockconnection);		
 	}
 	
 	//getAvailableRoom()
