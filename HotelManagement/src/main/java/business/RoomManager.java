@@ -4,8 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import connect.sqlite.IConnectData;
-import entities.IRoom;
-import entities.RoomStatus;
+
 
 public class RoomManager implements IRoomManager{
 
