@@ -9,7 +9,9 @@ public class ConnectData implements IConnectData{
 	public Connection conn = null;	
 	public boolean connect(){
 		try{
-			String url="jdbc:sqlite:E:\\HotelManagementProj\\DB\\hotel.s3db";
+			
+			//String url="jdbc:sqlite:E:\\HotelManagementProj\\DB\\hotel.s3db";
+			String url="jdbc:sqlite:Database\\hotel.s3db";
 			Class.forName("org.sqlite.JDBC");
 			conn = DriverManager.getConnection (url);
 			if(conn!=null)
