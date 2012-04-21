@@ -3,12 +3,15 @@ import java.sql.ResultSet;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
-import business.ServiceManager;
+import business.Service;
+
+
 import connect.sqlite.IConnectData;
 
 
 public class ServiceUTest {
 //getAvailableServices()
+	/*
 	@Test
 	public void getAvailableServicesTest(){
 		IConnectData mockconnection = EasyMock.createStrictMock(IConnectData.class);
@@ -18,11 +21,12 @@ public class ServiceUTest {
 		EasyMock.expect(mockconnection.connect()).andReturn(true);
 		EasyMock.expect(mockconnection.ExcuteQuery(sql)).andReturn(result);
 		
-		ServiceManager obj = new ServiceManager(mockconnection);
+		Service obj = new Service(mockconnection);
 		
 		EasyMock.replay(mockconnection);
 		obj.getAvailableServices();
 		EasyMock.verify(mockconnection);
 		
 	}
+	*/
 }

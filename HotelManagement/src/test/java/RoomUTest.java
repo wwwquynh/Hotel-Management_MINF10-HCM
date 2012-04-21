@@ -9,8 +9,8 @@ import org.junit.Test;
 import business.IRoomManager;
 import business.RoomManager;
 import connect.sqlite.IConnectData;
-import entities.IRoom;
-import entities.RoomStatus;
+import business.*;
+
 
 
 public class RoomUTest {

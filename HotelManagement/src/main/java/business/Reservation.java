@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import connect.sqlite.ConnectData;
+import connect.sqlite.IConnectData;
 import connect.sqlite.SQLItem;
 import connect.sqlite.SQLSupport;
 
@@ -25,6 +26,11 @@ public class Reservation implements IReservation{
 	public Reservation(){
 		
 	}
+	
+	public Reservation(IConnectData cnn){
+		this.conn = (ConnectData) cnn;
+	}
+	
 	public Reservation(int resID){
 		try {
 			this.resID = resID;

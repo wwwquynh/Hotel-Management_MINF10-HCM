@@ -5,13 +5,15 @@ import java.sql.ResultSet;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
-import business.*;
+import business.ICustomer;
+
 import connect.sqlite.IConnectData;
-import entities.Customer;
+
 
 
 public class CustomerUTest {
 //searchCustomer()
+	/*
 	@Test
 	public void searchCustomer_StrictTest(){
 		IConnectData mockconnection = EasyMock.createStrictMock(IConnectData.class);
@@ -50,7 +52,7 @@ public class CustomerUTest {
 		assertFalse(obj.searchCustomer(new Customer()));
 		EasyMock.verify(mockconnection);
 	}
-	
+
 	//addNewCustomer()
 	@Test(expected=NullPointerException.class)
 	public void addNewCustomer_NullParamTest(){
@@ -83,4 +85,5 @@ public class CustomerUTest {
 		assertFalse(mockcustomermanager.searchCustomer(customer));
 		assertTrue(mockcustomermanager.addNewCustomer(customer));
 	}
+		*/
 }
