@@ -2,11 +2,11 @@ import static org.junit.Assert.*;
 
 
 import java.sql.ResultSet;
-
 import org.easymock.EasyMock;
-import org.junit.Test;
 
+import org.junit.Test;
 import business.IRoomManager;
+
 import business.RoomManager;
 import connect.sqlite.IConnectData;
 import business.*;
