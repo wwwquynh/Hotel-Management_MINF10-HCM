@@ -217,4 +217,19 @@ public class Reservation implements IReservation{
 		boolean isOk = conn.queryExcuteUpdate(sql);
 		return isOk;
 	}
+	
+	public static ResultSet searchReservation(String custName){
+		ConnectData conn = new ConnectData();
+		conn.connect();
+//		  String colRes[] = {"Reservation ID", "Customer", "Address", "Phone", "Passport/ID", "Room", "From", "To"};
+		
+		StringBuilder sb = new StringBuilder();
+		  sb.append("select res.resID, cus.custName, cus.custAddress, cus.custPhone, cus.custPassport, r.roomName, res.resDate, res.resLeaveDate from Reservation res join Customer cus on res.customerID = cus.custID ");
+		  sb.append(" left join ReservationDetail resDet on res.resID = resDet.resID ");
+		  sb.append(" left join Room r on r.roomID = resDet.roomID ");
+		  sb.append(" where cus.custName like \"%" + custName + "%\"");
+		  String sql = sb.toString();
+		  System.out.println(sql);
+		return conn.ExcuteQuery(sql);
+	}
 } 

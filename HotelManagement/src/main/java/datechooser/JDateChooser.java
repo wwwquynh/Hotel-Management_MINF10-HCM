@@ -193,11 +193,12 @@ public class JDateChooser extends JPanel implements ActionListener,
 		setDateFormatString(dateFormatString);
 		setDate(date);
 
-		// Display a calendar button with an icon
-		URL iconURL = getClass().getResource(
-				
-				"/datechooser/images/JDateChooserIcon.gif");
-		ImageIcon icon = new ImageIcon(iconURL);
+		// Display a calendar button with an icon /HotelManagement/src/main/java/datechooser/images/
+	//URL iconURL = getClass().getResource("/images/JDateChooserIcon.gif");
+		//URL iconURL = getClass().getResource("/Hotel-Management_MINF10-HCM/HotelManagement/src/main/java/datechooser/images/JDateChooserIcon.gif");
+		//URL iconURL = ClassLoader.getSystemResource("/JDateChooserIcon.gif");
+		//ImageIcon icon = new ImageIcon(iconURL);
+		ImageIcon icon = new ImageIcon("D:/t/Hotel-Management_MINF10-HCM/HotelManagement/src/main/java/datechooser/images/JDateChooserIcon.gif");
 
 		calendarButton = new JButton(icon) {
 			private static final long serialVersionUID = -1913767779079949668L;
@@ -569,9 +570,9 @@ public class JDateChooser extends JPanel implements ActionListener,
 		// ImageIcon icon = new ImageIcon(iconURL);
 		// dateChooser.setIcon(icon);
 
-		frame.getContentPane().add(dateChooser);
-		frame.pack();
-		frame.setVisible(true);
+		//frame.getContentPane().add(dateChooser);
+		//frame.pack();
+		//frame.setVisible(true);
 	}
 
 }

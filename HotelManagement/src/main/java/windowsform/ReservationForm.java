@@ -33,6 +33,7 @@ public class ReservationForm extends JInternalFrame{
 	MDIDesktopPane desktop;
 	 DefaultTableModel tblModelAvailable;
 	 DefaultTableModel tblModelService;
+	 DefaultTableModel tblModelRes;
 	private static final long serialVersionUID = 1L;
 	
 	
@@ -65,14 +66,16 @@ public class ReservationForm extends JInternalFrame{
   JLabel jLabel10 = new JLabel();
   JLabel jLabel11 = new JLabel();
   JButton btnAddMoreService = new JButton();
-  JTable tblReservation = new JTable();
+  JTable tblReservation;// = new JTable();
   GridLayout gridLayout1 = new GridLayout();
   JButton btnSearch = new JButton();
   JButton btnSave = new JButton();
   JButton btnNew = new JButton();
   JLabel jLabel12 = new JLabel();
   JTextField txtIDCardNumber = new JTextField();
-
+  JScrollPane scrAvailable;// = new JScrollPane(tblAvailableService);
+  JScrollPane scrExtra;// = new JScrollPane(tblExtraService);
+  JScrollPane scrRes;// = new JScrollPane(tblReservation);
   public ReservationForm() {
     try {
       jbInit();
@@ -100,6 +103,7 @@ public class ReservationForm extends JInternalFrame{
 	      loadRoomDetail(roomID);
 	    }
 	    catch(Exception e) {
+	    	System.out.println("Ha: " + e.getMessage());
 	      e.printStackTrace();
 	    }
 	  
@@ -133,10 +137,12 @@ public class ReservationForm extends JInternalFrame{
   private void jbInit() throws Exception {
 	  String dataEmpty[][] = {{}};
 	  String col[] = {"Service ID", "Service Name", "Service Amt"};
+	  
+	  String colRes[] = {"Reservation ID", "Customer", "Address", "Phone", "Passport/ID", "Room", "From", "To"};
 
 	  tblModelAvailable = new DefaultTableModel(dataEmpty, col);
 	  tblModelService = new DefaultTableModel(dataEmpty, col);
-	  
+	  tblModelRes = new DefaultTableModel(dataEmpty, colRes);
 	  
     this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     this.setTitle("Reservation");
@@ -192,15 +198,26 @@ public class ReservationForm extends JInternalFrame{
 		public boolean isCellEditable(int rowIndex, int colIndex) {
 		  return false; //Disallow the editing of any cell
 	}};
-
-    tblAvailableService.setBounds(new Rectangle(168, 278, 234, 103));
-    
+	scrAvailable = new JScrollPane(tblAvailableService);
+    //tblAvailableService.setBounds(new Rectangle(168, 278, 234, 103));
+	scrAvailable.setBounds(new Rectangle(168, 278, 234, 103));
+	
     tblExtraService = new JTable(tblModelService){
 		private static final long serialVersionUID = 1L;
 		public boolean isCellEditable(int rowIndex, int colIndex) {
 		  return false; //Disallow the editing of any cell
 	}};
-    tblExtraService.setBounds(new Rectangle(433, 278, 234, 103));
+	scrExtra = new JScrollPane(tblExtraService);
+    //tblExtraService.setBounds(new Rectangle(433, 278, 234, 103));
+	scrExtra.setBounds(new Rectangle(433, 278, 234, 103));
+    
+    tblReservation = new JTable(tblModelRes){
+		private static final long serialVersionUID = 1L;
+		public boolean isCellEditable(int rowIndex, int colIndex) {
+		  return false; //Disallow the editing of any cell
+	}};
+	scrRes = new JScrollPane(tblReservation);
+	
     txtRoom.setBounds(new Rectangle(170, 194, 233, 21));
     txtRoom.setText("");
     txtTotalCost.setText("");
@@ -227,7 +244,12 @@ public class ReservationForm extends JInternalFrame{
     txtIDCardNumber.setBounds(new Rectangle(170, 58, 233, 21));
     txtIDCardNumber.setText("");
     this.getContentPane().add(jPanel2,  BorderLayout.CENTER);
-    jPanel2.add(tblReservation, null);
+    
+    
+    //jPanel2.add(tblReservation, null);//////////////////////////
+    //jPanel2.setLayout(new )
+    jPanel2.add(scrRes, BorderLayout.CENTER);
+    
     this.getContentPane().add(jPanel1, BorderLayout.NORTH);
     jPanel1.add(jLabel1, null);
     jPanel1.add(txtCustomerName, null);
@@ -245,12 +267,21 @@ public class ReservationForm extends JInternalFrame{
     jPanel1.add(jLabel9, null);
     jPanel1.add(jLabel8, null);
     jPanel1.add(txtRoom, null);
+    
     jPanel1.add(txtTotalCost, null);
     jPanel1.add(btnRoomChoose, null);
-    jPanel1.add(tblAvailableService, null);
+    
+    //jPanel1.add(tblAvailableService, null);//////////////////
+    jPanel1.add(scrAvailable, null);
+    
     jPanel1.add(jLabel10, null);
     jPanel1.add(jLabel11, null);
-    jPanel1.add(tblExtraService, null);
+    
+    
+    //jPanel1.add(tblExtraService, null);//////////////////
+    jPanel1.add(scrExtra, null);
+    
+    
     jPanel1.add(btnAddMoreService, null);
     jPanel1.add(btnSearch, null);
     jPanel1.add(txtPhone, null);
@@ -280,6 +311,22 @@ public class ReservationForm extends JInternalFrame{
 
   void btnSearch_actionPerformed(ActionEvent e) {
   //serach reservation
+	  try {
+		  ResultSet rs = Reservation.searchReservation(txtCustomerName.getText());
+		  int i = 0;
+		  while(rs.next()){
+//			  String colRes[] = {"Reservation ID", "Customer", "Address", "Phone", "Passport/ID", "Room", "From", "To"};
+		
+			  tblModelRes.insertRow(++i, new Object[]{rs.getInt("resID"), rs.getString("custName"), rs.getString("custAddress"), rs.getString("custPhone"), rs.getString("custPassport"), rs.getString("roomName"), rs.getDate("resDate"), rs.getDate("resLeaveDate")});
+		  }
+	} catch (SQLException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+
+	  	//select * from Reservation res join Customer cus on res.customerID = cus.custID
+	  //left join ReservationDetail resDet on res.resID = resDet.resID
+			  //where cus.custName like "%Bao%" and resDet.roomID = (select ro.roomID from Room ro where ro.roomName like "103" limit 1)
   }
 
   void btnNew_actionPerformed(ActionEvent e) {
@@ -303,8 +350,7 @@ public class ReservationForm extends JInternalFrame{
 			 
 		      String checkin = dateFormat.format(dateCheckin.getDate());
 			  String checkout = dateFormat.format(dateCheckout.getDate());
-
-			  
+  
 			  resrvID =  Reservation.addReservationStat(custID,  checkin, checkout, Double.parseDouble(txtTotalCost.getText()), Integer.parseInt(spNumOfAdult.getValue().toString()), Integer.parseInt(spNumOfChild.getValue().toString()), 1);
 			
 
