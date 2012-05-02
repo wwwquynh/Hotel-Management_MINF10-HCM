@@ -10,7 +10,8 @@ public class InvoiceManager {
 		
 	}
 	public boolean addNewInvoice(Customer customer) throws NullPointerException{
-		if (customer == null){
+		if (customer == null){	
+			conn.ExcuteQuery("zx");
 			throw new NullPointerException();
 		}
 		return false;
