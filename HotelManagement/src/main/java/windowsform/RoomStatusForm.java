@@ -236,6 +236,15 @@ public class RoomStatusForm extends JInternalFrame {
 		}
 	});
     
+    miCheckIn.addActionListener(new ActionListener() {
+
+		public void actionPerformed(ActionEvent arg0) {
+			
+			CheckinForm res = new CheckinForm(desktop, selectedRoomID);
+			desktop.add(res);
+		}
+	});
+    
   }
 
 }

@@ -21,7 +21,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-public class ReservationForm extends JInternalFrame{
+public class CheckinForm extends JInternalFrame{
 
 	/**
 	 *
@@ -76,7 +76,7 @@ public class ReservationForm extends JInternalFrame{
   JScrollPane scrAvailable;// = new JScrollPane(tblAvailableService);
   JScrollPane scrExtra;// = new JScrollPane(tblExtraService);
   JScrollPane scrRes;// = new JScrollPane(tblReservation);
-  public ReservationForm() {
+  public CheckinForm() {
     try {
       jbInit();
       this.setClosable(true);
@@ -90,7 +90,7 @@ public class ReservationForm extends JInternalFrame{
     }
   }
   
-  public ReservationForm(MDIDesktopPane desktop, int roomID){
+  public CheckinForm(MDIDesktopPane desktop, int roomID){
 	  try {
 		  this.desktop = desktop;
 	      jbInit();
@@ -104,11 +104,13 @@ public class ReservationForm extends JInternalFrame{
 	    }
 	    catch(Exception e) {
 	    	System.out.println("Ha: " + e.getMessage());
-	      e.printStackTrace();
-	    }
+	      e.printStackTrace();	    }
 	  
   }
-  
+  //checkin with reservation
+  public CheckinForm(MDIDesktopPane desktop, int resID, boolean res){
+	  
+  }
   private void loadRoomDetail(int roomID){
 	  //load room detail
 	  Room room = new Room(roomID);
@@ -159,7 +161,7 @@ public class ReservationForm extends JInternalFrame{
     txtCustomerName.setBounds(new Rectangle(171, 32, 233, 21));
     btnCustomerChoose.setBounds(new Rectangle(410, 32, 45, 21));
     btnCustomerChoose.setText("...");
-    btnCustomerChoose.addActionListener(new ReservationForm_btnCustomerChoose_actionAdapter(this));
+    btnCustomerChoose.addActionListener(new CheckinForm_btnCustomerChoose_actionAdapter(this));
     txtPhone.setBounds(new Rectangle(171, 84, 233, 21));
     txtPhone.setText("");
     txtAddress.setBounds(new Rectangle(170, 110, 233, 21));
@@ -186,7 +188,7 @@ public class ReservationForm extends JInternalFrame{
     dateCheckout.setBounds(new Rectangle(170, 167, 233, 21));
     //dateCheckout.setText("");
     btnRoomChoose.setText("...");
-    btnRoomChoose.addActionListener(new ReservationForm_btnRoomChoose_actionAdapter(this));
+    btnRoomChoose.addActionListener(new CheckinForm_btnRoomChoose_actionAdapter(this));
     btnRoomChoose.setBounds(new Rectangle(409, 195, 45, 21));
     jLabel9.setBounds(new Rectangle(30, 192, 65, 24));
     jLabel9.setText("Room");
@@ -228,17 +230,17 @@ public class ReservationForm extends JInternalFrame{
     jLabel11.setBounds(new Rectangle(432, 250, 114, 24));
     btnAddMoreService.setBounds(new Rectangle(568, 251, 98, 21));
     btnAddMoreService.setText("Add More...");
-    btnAddMoreService.addActionListener(new ReservationForm_btnAddMoreService_actionAdapter(this));
+    btnAddMoreService.addActionListener(new CheckinForm_btnAddMoreService_actionAdapter(this));
     btnSearch.setBounds(new Rectangle(168, 389, 82, 21));
     btnSearch.setToolTipText("");
     btnSearch.setText("Search");
-    btnSearch.addActionListener(new ReservationForm_btnSearch_actionAdapter(this));
+    btnSearch.addActionListener(new CheckinForm_btnSearch_actionAdapter(this));
     btnSave.setBounds(new Rectangle(336, 388, 66, 21));
     btnSave.setText("Save");
-    btnSave.addActionListener(new ReservationForm_btnSave_actionAdapter(this));
+    btnSave.addActionListener(new CheckinForm_btnSave_actionAdapter(this));
     btnNew.setBounds(new Rectangle(263, 390, 62, 21));
     btnNew.setText("New");
-    btnNew.addActionListener(new ReservationForm_btnNew_actionAdapter(this));
+    btnNew.addActionListener(new CheckinForm_btnNew_actionAdapter(this));
     jLabel12.setBounds(new Rectangle(32, 57, 68, 22));
     jLabel12.setText("ID/Passport");
     txtIDCardNumber.setBounds(new Rectangle(170, 58, 233, 21));
@@ -305,8 +307,8 @@ public class ReservationForm extends JInternalFrame{
   }
 
   void btnAddMoreService_actionPerformed(ActionEvent e) {
-	  	ServiceChoose sc = new ServiceChoose(this);
-	  	desktop.add(sc);
+	  	//ServiceChoose sc = new ServiceChoose(this);
+	  	//desktop.add(sc);
   }
 
   void btnSearch_actionPerformed(ActionEvent e) {
@@ -351,7 +353,7 @@ public class ReservationForm extends JInternalFrame{
 		      String checkin = dateFormat.format(dateCheckin.getDate());
 			  String checkout = dateFormat.format(dateCheckout.getDate());
   
-			  resrvID =  Reservation.addReservationStat(custID,  checkin, checkout, Double.parseDouble(txtTotalCost.getText()), Integer.parseInt(spNumOfAdult.getValue().toString()), Integer.parseInt(spNumOfChild.getValue().toString()), 1, 0);//0:reservation
+			  resrvID =  Reservation.addReservationStat(custID,  checkin, checkout, Double.parseDouble(txtTotalCost.getText()), Integer.parseInt(spNumOfAdult.getValue().toString()), Integer.parseInt(spNumOfChild.getValue().toString()), 1, 1); //1: normal checkin
 			
 
 			  //add reservation detail-> code
@@ -367,7 +369,7 @@ public class ReservationForm extends JInternalFrame{
 			  }
 			  
 			  //update room status
-			  Room.updateStatus(roomID, 2);
+			  Room.updateStatus(roomID, 3);//occupied
 			  System.out.println("ok las");
 	  }
 	  catch(Exception ex){
@@ -377,10 +379,10 @@ public class ReservationForm extends JInternalFrame{
 
 }
 
-class ReservationForm_btnCustomerChoose_actionAdapter implements java.awt.event.ActionListener {
-  ReservationForm adaptee;
+class CheckinForm_btnCustomerChoose_actionAdapter implements java.awt.event.ActionListener {
+	CheckinForm adaptee;
 
-  ReservationForm_btnCustomerChoose_actionAdapter(ReservationForm adaptee) {
+  CheckinForm_btnCustomerChoose_actionAdapter(CheckinForm adaptee) {
     this.adaptee = adaptee;
   }
   public void actionPerformed(ActionEvent e) {
@@ -388,10 +390,10 @@ class ReservationForm_btnCustomerChoose_actionAdapter implements java.awt.event.
   }
 }
 
-class ReservationForm_btnRoomChoose_actionAdapter implements java.awt.event.ActionListener {
-  ReservationForm adaptee;
+class CheckinForm_btnRoomChoose_actionAdapter implements java.awt.event.ActionListener {
+	CheckinForm adaptee;
 
-  ReservationForm_btnRoomChoose_actionAdapter(ReservationForm adaptee) {
+  CheckinForm_btnRoomChoose_actionAdapter(CheckinForm adaptee) {
     this.adaptee = adaptee;
   }
   public void actionPerformed(ActionEvent e) {
@@ -399,10 +401,10 @@ class ReservationForm_btnRoomChoose_actionAdapter implements java.awt.event.Acti
   }
 }
 
-class ReservationForm_btnAddMoreService_actionAdapter implements java.awt.event.ActionListener {
-  ReservationForm adaptee;
+class CheckinForm_btnAddMoreService_actionAdapter implements java.awt.event.ActionListener {
+	CheckinForm adaptee;
 
-  ReservationForm_btnAddMoreService_actionAdapter(ReservationForm adaptee) {
+  CheckinForm_btnAddMoreService_actionAdapter(CheckinForm adaptee) {
     this.adaptee = adaptee;
   }
   public void actionPerformed(ActionEvent e) {
@@ -410,10 +412,10 @@ class ReservationForm_btnAddMoreService_actionAdapter implements java.awt.event.
   }
 }
 
-class ReservationForm_btnSearch_actionAdapter implements java.awt.event.ActionListener {
-  ReservationForm adaptee;
+class CheckinForm_btnSearch_actionAdapter implements java.awt.event.ActionListener {
+	CheckinForm adaptee;
 
-  ReservationForm_btnSearch_actionAdapter(ReservationForm adaptee) {
+	CheckinForm_btnSearch_actionAdapter(CheckinForm adaptee) {
     this.adaptee = adaptee;
   }
   public void actionPerformed(ActionEvent e) {
@@ -421,10 +423,10 @@ class ReservationForm_btnSearch_actionAdapter implements java.awt.event.ActionLi
   }
 }
 
-class ReservationForm_btnNew_actionAdapter implements java.awt.event.ActionListener {
-  ReservationForm adaptee;
+class CheckinForm_btnNew_actionAdapter implements java.awt.event.ActionListener {
+	CheckinForm adaptee;
 
-  ReservationForm_btnNew_actionAdapter(ReservationForm adaptee) {
+	CheckinForm_btnNew_actionAdapter(CheckinForm adaptee) {
     this.adaptee = adaptee;
   }
   public void actionPerformed(ActionEvent e) {
@@ -432,10 +434,10 @@ class ReservationForm_btnNew_actionAdapter implements java.awt.event.ActionListe
   }
 }
 
-class ReservationForm_btnSave_actionAdapter implements java.awt.event.ActionListener {
-  ReservationForm adaptee;
+class CheckinForm_btnSave_actionAdapter implements java.awt.event.ActionListener {
+	CheckinForm adaptee;
 
-  ReservationForm_btnSave_actionAdapter(ReservationForm adaptee) {
+	CheckinForm_btnSave_actionAdapter(CheckinForm adaptee) {
     this.adaptee = adaptee;
   }
   public void actionPerformed(ActionEvent e) {
