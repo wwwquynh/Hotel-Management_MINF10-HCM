@@ -9,7 +9,7 @@ public class ReservationTest {
 
 	@Test 
 	public void testReservationNotNull(){
-		Reservation resv = new Reservation(1, null, null, 10.0, 2, 1, 0);
+		Reservation resv = new Reservation(1, null, null, 10.0, 2, 1, 0, 0);
 		assertNotNull(resv);
 	}
 	@Test 
