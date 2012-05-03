@@ -1,6 +1,6 @@
 package windowsform;
 
-import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -30,6 +30,10 @@ import java.awt.event.MouseEvent;
 
 public class AssignTaskForm extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txt_ID;
 	private JTextField txt_taskID;

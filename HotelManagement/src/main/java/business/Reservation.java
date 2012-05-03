@@ -20,7 +20,7 @@ public class Reservation implements IReservation{
 	int numberOfAdult;
 	int numberOfChild;
 	int resStatus;
-	
+	int bookType;
 	ConnectData conn;
 	
 	public Reservation(){
@@ -48,6 +48,7 @@ public class Reservation implements IReservation{
 				this.numberOfAdult = rs.getInt("numberOfAdult");
 				this.numberOfChild = rs.getInt("numberOfChild");
 				this.resStatus = rs.getInt("resStatus");
+				this.bookType = rs.getInt("bookType");
 			}
 			conn.dispose();
 			
@@ -104,7 +105,7 @@ public class Reservation implements IReservation{
 	public void setResStatus(int resStatus) {
 		this.resStatus = resStatus;
 	}
-	public Reservation(int resID, int customerID, Date resDate, Date resLeaveDate, double preTotalCost, int numberOfAdult, int numberOfChild, int resStatus){
+	public Reservation(int resID, int customerID, Date resDate, Date resLeaveDate, double preTotalCost, int numberOfAdult, int numberOfChild, int resStatus, int bookType){
 		this.resID = resID;
 		this.customerID = customerID;
 		this.resDate = resDate;
@@ -113,8 +114,17 @@ public class Reservation implements IReservation{
 		this.numberOfAdult = numberOfAdult;
 		this.numberOfChild = numberOfChild;
 		this.resStatus = resStatus;
+		this.bookType = bookType;
 	}
-	public Reservation(int customerID, Date resDate, Date resLeaveDate, double preTotalCost, int numberOfAdult, int numberOfChild, int resStatus){
+	public int getBookType() {
+		return bookType;
+	}
+
+	public void setBookType(int bookType) {
+		this.bookType = bookType;
+	}
+
+	public Reservation(int customerID, Date resDate, Date resLeaveDate, double preTotalCost, int numberOfAdult, int numberOfChild, int resStatus, int bookType){
 		this.customerID = customerID;
 		this.resDate = resDate;
 		this.resLeaveDate = resLeaveDate;
@@ -122,9 +132,10 @@ public class Reservation implements IReservation{
 		this.numberOfAdult = numberOfAdult;
 		this.numberOfChild = numberOfChild;
 		this.resStatus = resStatus;
+		this.bookType = bookType;
 	}
 	
-	public static int addReservationStat(int customerID, String resDate, String resLeaveDate, double preTotalCost, int numberOfAdult, int numberOfChild, int resStatus){
+	public static int addReservationStat(int customerID, String resDate, String resLeaveDate, double preTotalCost, int numberOfAdult, int numberOfChild, int resStatus, int bookType){
 		ConnectData conn;
 		ArrayList<SQLItem> items = new ArrayList<SQLItem>();
 		items.add(new SQLItem(1, "resID", null));
@@ -135,6 +146,7 @@ public class Reservation implements IReservation{
 		items.add(new SQLItem(1, "numberOfAdult", numberOfAdult));
 		items.add(new SQLItem(1, "numberOfChild", numberOfChild));
 		items.add(new SQLItem(1, "resStatus", resStatus));
+		items.add(new SQLItem(1, "bookType", bookType));
 		String sql = SQLSupport.prepareAddSql("Reservation", items);
 		System.out.println(sql);
 		conn = new ConnectData();
@@ -161,6 +173,7 @@ public class Reservation implements IReservation{
 		items.add(new SQLItem(1, "numberOfAdult", numberOfAdult));
 		items.add(new SQLItem(1, "numberOfChild", numberOfChild));
 		items.add(new SQLItem(1, "resStatus", resStatus));
+		items.add(new SQLItem(1, "bookType", bookType));// 0 la reservation, 1 la checkin
 		String sql = SQLSupport.prepareAddSql("Reservation", items);
 		System.out.println(sql);
 		conn = new ConnectData();
