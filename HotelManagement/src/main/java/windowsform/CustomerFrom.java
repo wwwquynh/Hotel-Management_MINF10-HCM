@@ -14,6 +14,7 @@ import javax.swing.event.AncestorEvent;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Font;
 
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JButton;
@@ -23,6 +24,8 @@ import javax.swing.JScrollPane;
 import business.ICustomer;
 
 import connect.sqlite.ConnectData;
+import formcontroller.MDIDesktopPane;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -31,14 +34,16 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 @SuppressWarnings("serial")
-public class CustomerFrom extends JFrame implements ICustomer {
+public class CustomerFrom extends JInternalFrame implements ICustomer {
 
+	MDIDesktopPane desktop;
 	private JPanel contentPane;
 	private static JTextField txt_ID;
 	private static JTextField txt_Name;
 	private static JTextField txt_Phone;
 	private static JTextField txt_Address;
 	private static JTextField txt_email;
+	private static JTextField txt_Passport;
 	private static JTable table;
 
 	//
@@ -47,7 +52,8 @@ public class CustomerFrom extends JFrame implements ICustomer {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
+		/*EventQueue.invokeLater(new Runnable() {
+			
 			public void run() {
 				try {
 					CustomerFrom frame = new CustomerFrom();
@@ -58,13 +64,14 @@ public class CustomerFrom extends JFrame implements ICustomer {
 					e.printStackTrace();
 				}
 			}
-		});
+		});*/
 	}
 
 	/**
 	 * Create the frame.
 	 */
-	public CustomerFrom() {
+	public CustomerFrom(MDIDesktopPane desktop) {
+		this.desktop = desktop;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 477);
 		contentPane = new JPanel();
@@ -145,6 +152,7 @@ public class CustomerFrom extends JFrame implements ICustomer {
 				txt_Phone.setText("");
 				txt_Address.setText("");
 				txt_email.setText("");
+				txt_Passport.setText("");
 			}
 		});
 		btnNew.setBounds(10, 401, 89, 23);
@@ -181,6 +189,7 @@ public class CustomerFrom extends JFrame implements ICustomer {
 		contentPane.add(btnDelete);
 		
 		txt_ID = new JTextField();
+		txt_ID.setEditable(false);
 		txt_ID.setBounds(97, 60, 155, 20);
 		contentPane.add(txt_ID);
 		txt_ID.setColumns(10);
@@ -205,8 +214,14 @@ public class CustomerFrom extends JFrame implements ICustomer {
 		contentPane.add(txt_email);
 		txt_email.setColumns(10);
 		
+		txt_Passport = new JTextField();
+		txt_Passport.setBounds(97, 245, 335, 20);
+		contentPane.add(txt_Passport);
+		txt_Passport.setColumns(10);
+		
+		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 246, 422, 144);
+		scrollPane.setBounds(10, 270, 422, 124);
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
@@ -223,6 +238,8 @@ public class CustomerFrom extends JFrame implements ICustomer {
 			}
 		});
 		scrollPane.setViewportView(table);
+		
+		showTable();
 	}
 
 	@Override
@@ -235,7 +252,8 @@ public class CustomerFrom extends JFrame implements ICustomer {
 		String phone=txt_Phone.getText();
 		String address=txt_Address.getText();
 		String email=txt_email.getText();	
-		String sql_insert="insert into Customer values("+ null +",'"+name+ "','"+ phone+ "','" +address+"','"+email+"')";
+		String passport = txt_Passport.getText();
+		String sql_insert="insert into Customer values("+ null +",'"+name+ "','"+ phone+ "','" +address+"','"+email+"','"+passport+"')";
 		if(ds.queryExcuteUpdate(sql_insert))
 		{
 			JOptionPane.showMessageDialog(null,"Successfull");
@@ -264,8 +282,8 @@ public class CustomerFrom extends JFrame implements ICustomer {
 		String phone=txt_Phone.getText();
 		String address=txt_Address.getText();
 		String email=txt_email.getText();		
-
-		String sql_insert="Update Customer Set custID="+id+",custName='"+name+ "',custAddress='"+ address+ "',custPhone='" +phone+"',custEmail='"+email+"' where custID=" + id ;
+		String passport = txt_Passport.getText(); 
+		String sql_insert="Update Customer Set custID="+id+",custName='"+name+ "',custAddress='"+ address+ "',custPhone='" +phone+"',custEmail='"+email+ "', custPassport = '"+passport+ "' where custID=" + id ;
 		if(ds.queryExcuteUpdate(sql_insert))					
 		{
 			JOptionPane.showMessageDialog(null,"Successfull");
@@ -294,6 +312,7 @@ public class CustomerFrom extends JFrame implements ICustomer {
 		rowHeader.add ("Phone"); 
 		rowHeader.add ("Address"); 
 		rowHeader.add ("Email"); 
+		rowHeader.add ("Passport"); 
 		 		
 		DefaultTableModel model = new DefaultTableModel(rowHeader,0);				
 		table.setModel(model); 				
@@ -310,7 +329,8 @@ public class CustomerFrom extends JFrame implements ICustomer {
 				rowData.add (rs.getString("custName"));
 				rowData.add (rs.getString("custPhone")); 
 				rowData.add (rs.getString("custAddress")); 
-				rowData.add (rs.getString("custEmail")); 				 
+				rowData.add (rs.getString("custEmail"));
+				rowData.add(rs.getString("custPassport"));
 				model.addRow(rowData) ; 
 			} 
 
@@ -379,6 +399,7 @@ public class CustomerFrom extends JFrame implements ICustomer {
 		txt_Phone.setText((String) table.getValueAt(row, 2));
 		txt_Address.setText((String) table.getValueAt(row, 3));
 		txt_email.setText((String) table.getValueAt(row, 4));
+		txt_Passport.setText((String) table.getValueAt(row, 5));
 	}
 
 	
