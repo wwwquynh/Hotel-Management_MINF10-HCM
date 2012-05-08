@@ -59,6 +59,7 @@ public class MDIDesktopPane extends JDesktopPane {
 	    */
 	    moveToFront(frame);
 	    frame.setVisible(true);
+	    
 	    try {
 	      frame.setSelected(true);
 	    } catch (PropertyVetoException e) {

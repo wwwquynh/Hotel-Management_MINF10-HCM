@@ -124,18 +124,21 @@ private void loadAllService(){
   void btnOk_actionPerformed(ActionEvent e) {
 	  int rowcount = tblService.getModel().getRowCount();
 	  int j=0;
+	  double total = 0;
 	  for(int i=1; i<rowcount; i++){
 		  if(tblService.getModel().getValueAt(i, 0).toString() == "true"){
 			rf.tblModelService.insertRow(++j, new Object[]{tblService.getModel().getValueAt(i, 1), tblService.getModel().getValueAt(i, 2), tblService.getModel().getValueAt(i, 3)});
+			total += Double.parseDouble(tblService.getModel().getValueAt(i, 3)+ "");
 		  }
 		  
 	  }
-	  
+	  double totalcost = Double.parseDouble(rf.txtTotalCost.getText())+ total;
+	  rf.txtTotalCost.setText(totalcost + "");
 	  this.setVisible(false);
   }
 
   void btnCancel_actionPerformed(ActionEvent e) {
-	  System.out.println("cancel button");
+	  this.setVisible(false);
   }
 
 }

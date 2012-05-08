@@ -5,6 +5,7 @@ import datechooser.*;
 import formcontroller.MDIDesktopPane;
 
 import javax.swing.*;
+import javax.swing.event.InternalFrameEvent;
 import javax.swing.table.DefaultTableModel;
 
 import business.AvailableService;
@@ -31,11 +32,14 @@ public class ReservationForm extends JInternalFrame{
 	private int resrvID = 0;
 	private int resDetailID = 0;
 	MDIDesktopPane desktop;
+	
+	JInternalFrame owner;
 	 DefaultTableModel tblModelAvailable;
 	 DefaultTableModel tblModelService;
 	 DefaultTableModel tblModelRes;
-	private static final long serialVersionUID = 1L;
-	
+	 
+	 private boolean isReservation = false;
+	 private static final long serialVersionUID = 1L;
 	
   BorderLayout borderLayout1 = new BorderLayout();
   JPanel jPanel1 = new JPanel();
@@ -76,31 +80,40 @@ public class ReservationForm extends JInternalFrame{
   JScrollPane scrAvailable;// = new JScrollPane(tblAvailableService);
   JScrollPane scrExtra;// = new JScrollPane(tblExtraService);
   JScrollPane scrRes;// = new JScrollPane(tblReservation);
-  public ReservationForm() {
+  public ReservationForm(JInternalFrame owner, MDIDesktopPane desktop, boolean isReservation, int resrvID) {
     try {
-      jbInit();
-      this.setClosable(true);
-      this.setMaximizable(true);
-      this.setVisible(true);
-      this.setSize(800, 600);
-      this.setResizable(true);
+    	this.owner = owner;
+		this.isReservation = isReservation;
+		this.resrvID = resrvID;
+		this.desktop = desktop;
+		jbInit();
+		this.setClosable(true);
+		  this.setMaximizable(true);
+		  this.setVisible(true);
+		  this.setSize(800, 600);
+		  this.setResizable(true);
     }
     catch(Exception e) {
       e.printStackTrace();
     }
   }
   
-  public ReservationForm(MDIDesktopPane desktop, int roomID){
+  public ReservationForm(JInternalFrame owner, MDIDesktopPane desktop, int roomID, boolean isReservation, int resrvID){
 	  try {
+		  this.owner = owner;
 		  this.desktop = desktop;
-	      jbInit();
+	      this.isReservation = isReservation;
+	      this.resrvID = resrvID;
+		  jbInit();
 	      this.setClosable(true);
 	      this.setMaximizable(true);
 	      this.setVisible(true);
 	      this.setSize(800, 600);
 	      this.setResizable(true);
-	      
-	      loadRoomDetail(roomID);
+	      if(resrvID == 0)
+	    	  loadRoomDetail(roomID);
+	      else
+	    	  loadReservation();
 	    }
 	    catch(Exception e) {
 	    	System.out.println("Ha: " + e.getMessage());
@@ -109,6 +122,76 @@ public class ReservationForm extends JInternalFrame{
 	  
   }
   
+  public void loadReservation(){
+	  if(this.resrvID != 0){//load reservation
+		  System.out.println(resrvID);
+		  
+		  ResultSet rs = Reservation.getReservationInfo(resrvID);
+		  try {
+			  while(rs.next()){
+				  this.custID = rs.getInt("customerID");
+				  this.spNumOfAdult.setValue(rs.getInt("numberOfAdult"));
+				  this.spNumOfChild.setValue(rs.getInt("numberOfChild"));
+				  this.dateCheckin.setDate(rs.getDate("resDate"));
+				  this.dateCheckout.setDate(rs.getDate("resLeaveDate"));
+				  this.txtTotalCost.setText(rs.getDouble("preTotalCost") + "");  
+				  roomID = rs.getInt("roomID");
+			  }
+		
+			  
+			  //load customer
+			  loadCustomer(custID);
+			  
+		  //load reservation detail room, service
+			  loadRoomDetailOfRes(roomID);
+			  loadExtraService(resrvID);
+		  //load 
+		  
+		  } catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	  }
+  }
+  
+  private void loadCustomer(int custID){
+	  Customer cust = new Customer(custID);
+	  this.txtCustomerName.setText(cust.getCustName());
+	  this.txtAddress.setText(cust.getCustAddress());
+	  this.txtIDCardNumber.setText(cust.getCustPassport());
+	  this.txtPhone.setText(cust.getCustPhone());
+	  
+  }
+  
+  private void loadRoomDetailOfRes(int roomID){
+	  Room room = new Room(roomID);
+	  this.roomID = roomID;
+	  this.txtRoom.setText(room.getRoomName());
+	  
+	  ResultSet rs = AvailableService.getAvailableServiceByRoom(roomID);
+	  try {
+		  int i=0;
+		  while(rs.next()){
+			tblModelAvailable.insertRow(++i, new Object[]{rs.getInt("serviceID"), rs.getString("serviceName"), rs.getDouble("serviceAmount")});
+		  }
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+  }
+  
+  private void loadExtraService(int resID){
+	  try{
+		  ResultSet rs = ReservationDetailService.getExtraServices(resID);
+		  int i = 0;
+		  while(rs.next()){
+			  tblModelService.insertRow(++i, new Object[]{rs.getInt("serviceID"), rs.getString("serviceName"), rs.getDouble("serviceAmount")});
+		  }
+	  }
+	  catch(Exception ex){
+		System.out.println(ex.getMessage());  
+	  }
+  }
   private void loadRoomDetail(int roomID){
 	  //load room detail
 	  Room room = new Room(roomID);
@@ -144,8 +227,18 @@ public class ReservationForm extends JInternalFrame{
 	  tblModelService = new DefaultTableModel(dataEmpty, col);
 	  tblModelRes = new DefaultTableModel(dataEmpty, colRes);
 	  
+	  this.addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
+	      public void internalFrameClosing(InternalFrameEvent e) {
+	       ////////////// update
+	    	  if(owner != null){
+	    		  ((RoomStatusForm)owner).updateRoomLayout();
+	    	  }
+	      }
+	    }); 
+	  
     this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-    this.setTitle("Reservation");
+    
+    this.setTitle(isReservation?"Reservation":"Checkin");
     this.setPreferredSize(new Dimension(800, 600));
     this.getContentPane().setLayout(borderLayout1);
     jPanel1.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -297,16 +390,24 @@ public class ReservationForm extends JInternalFrame{
 
   //}
   void btnCustomerChoose_actionPerformed(ActionEvent e) {
-//Customer Choose
+	  	//Customer Choose
+	  CustomerFrom cus = new CustomerFrom(desktop, this);
+	  desktop.add(cus);
   }
 
   void btnRoomChoose_actionPerformed(ActionEvent e) {
 //Room choose
+	  RoomStatusForm rst = new RoomStatusForm(desktop, this);
+	  desktop.add(rst);
   }
 
   void btnAddMoreService_actionPerformed(ActionEvent e) {
 	  	ServiceChoose sc = new ServiceChoose(this);
-	  	desktop.add(sc);
+	  	try{
+	  		desktop.add(sc);
+	  	}catch(Exception ex){
+	  		System.out.println(ex.getMessage());
+	  	}
   }
 
   void btnSearch_actionPerformed(ActionEvent e) {
@@ -336,8 +437,9 @@ public class ReservationForm extends JInternalFrame{
   void btnSave_actionPerformed(ActionEvent e) {
 	  try{
 
-		//save reservation
-			  //create new customer if code = 0
+		  if(resrvID==0)//create res
+		  {
+//create new customer if code = 0
 			  
 			  if(custID == 0){
 				  Customer cus = new Customer(0, txtCustomerName.getText(), txtAddress.getText(), txtPhone.getText(), "", txtIDCardNumber.getText());
@@ -351,7 +453,7 @@ public class ReservationForm extends JInternalFrame{
 		      String checkin = dateFormat.format(dateCheckin.getDate());
 			  String checkout = dateFormat.format(dateCheckout.getDate());
   
-			  resrvID =  Reservation.addReservationStat(custID,  checkin, checkout, Double.parseDouble(txtTotalCost.getText()), Integer.parseInt(spNumOfAdult.getValue().toString()), Integer.parseInt(spNumOfChild.getValue().toString()), 1, 0);//0:reservation
+			  resrvID =  Reservation.addReservationStat(custID,  checkin, checkout, Double.parseDouble(txtTotalCost.getText()), Integer.parseInt(spNumOfAdult.getValue().toString()), Integer.parseInt(spNumOfChild.getValue().toString()), 1, isReservation?0:1);//0:reservation, 1 checkin
 			
 
 			  //add reservation detail-> code
@@ -367,14 +469,39 @@ public class ReservationForm extends JInternalFrame{
 			  }
 			  
 			  //update room status
-			  Room.updateStatus(roomID, 2);
+			  Room.updateStatus(roomID, isReservation?2:3);//2: reserv. 3. checked in
+			  Room.updateReservationOcc(roomID, resrvID);
 			  System.out.println("ok las");
+			  if(isReservation)
+				  JOptionPane.showMessageDialog(null,"New Reservation added");
+			  else
+				  JOptionPane.showMessageDialog(null,"New checkin made");
+		  }else//update thanh check in.
+		  {
+			  Reservation.makeCheckin(resrvID);
+			  Room.updateStatus(roomID, 3);//2: reserv. 3. checked in
+			  JOptionPane.showMessageDialog(null,"Checkin made from reservation");
+		  }
+			  
 	  }
 	  catch(Exception ex){
 		  System.out.println(ex.getMessage());
 	  }
   }
-
+  
+  public void updateCustomerInfo(int custID, String custName, String custAddress, String custPhone, String custPassport, String email){
+	  this.custID = custID;
+	  txtCustomerName.setText(custName);
+	  txtAddress.setText(custAddress);
+	  txtIDCardNumber.setText(custPassport);
+	  txtPhone.setText(custPhone);
+  }
+  
+  public void updateRoomInfo(int roomID){
+	  this.roomID = roomID;
+	  loadRoomDetail(roomID);
+  }
+  
 }
 
 class ReservationForm_btnCustomerChoose_actionAdapter implements java.awt.event.ActionListener {
@@ -441,4 +568,5 @@ class ReservationForm_btnSave_actionAdapter implements java.awt.event.ActionList
   public void actionPerformed(ActionEvent e) {
     adaptee.btnSave_actionPerformed(e);
   }
+  
 }

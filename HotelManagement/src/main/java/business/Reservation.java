@@ -245,4 +245,23 @@ public class Reservation implements IReservation{
 		  System.out.println(sql);
 		return conn.ExcuteQuery(sql);
 	}
+	
+	public static ResultSet getReservationInfo(int resID){
+		ConnectData conn = new ConnectData();
+		conn.connect();
+		String sql = "select * from Reservation res ";
+				sql += " left join ReservationDetail resdet on res.resID = resdet.resID ";
+				sql += " where res.resID = " + resID;
+	
+		return conn.ExcuteQuery(sql);		
+	}
+	
+	public static void makeCheckin(int resID){
+		String sql = "UPDATE Reservation set resStatus = 1 where resID = " + resID;
+		ConnectData conn = new ConnectData();
+		conn.connect();
+		conn.queryExcuteUpdate(sql);
+
+	}
+	
 } 

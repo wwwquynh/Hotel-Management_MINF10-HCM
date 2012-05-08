@@ -1,6 +1,6 @@
 package windowsform;
 
-import java.awt.EventQueue;
+//import java.awt.EventQueue;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
@@ -45,7 +45,7 @@ public class CustomerFrom extends JInternalFrame implements ICustomer {
 	private static JTextField txt_email;
 	private static JTextField txt_Passport;
 	private static JTable table;
-
+	JInternalFrame owner;
 	//
 		
 	/**
@@ -70,10 +70,14 @@ public class CustomerFrom extends JInternalFrame implements ICustomer {
 	/**
 	 * Create the frame.
 	 */
-	public CustomerFrom(MDIDesktopPane desktop) {
+	public CustomerFrom(final MDIDesktopPane desktop, JInternalFrame owner) {
 		this.desktop = desktop;
+		this.owner = owner;
+		this.setClosable(true);
+		this.setMaximizable(true);
+		this.setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 477);
+		setBounds(100, 100, 450, 497);
 		contentPane = new JPanel();
 		contentPane.addAncestorListener(new AncestorListener() {
 			public void ancestorAdded(AncestorEvent arg0) {
@@ -155,38 +159,60 @@ public class CustomerFrom extends JInternalFrame implements ICustomer {
 				txt_Passport.setText("");
 			}
 		});
-		btnNew.setBounds(10, 401, 89, 23);
+		btnNew.setBounds(10, 401, 69, 23);
 		contentPane.add(btnNew);
 		
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addCustomer();
-				showTable();
+				showTable("SELECT * FROM Customer");
 			}
 		});
-		btnAdd.setBounds(118, 401, 89, 23);
+		btnAdd.setBounds(88, 401, 69, 23);
 		contentPane.add(btnAdd);
 		
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				updateCustomer();
-				showTable();
+				showTable("SELECT * FROM Customer");
 			}
 		});
-		btnUpdate.setBounds(234, 401, 89, 23);
+		btnUpdate.setBounds(170, 401, 79, 23);
 		contentPane.add(btnUpdate);
 		
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				deleteCustomer();
-				showTable();
+				showTable("SELECT * FROM Customer");
 			}
 		});
-		btnDelete.setBounds(343, 401, 89, 23);
+		btnDelete.setBounds(265, 401, 79, 23);
 		contentPane.add(btnDelete);
+		
+		JButton btnSearch = new JButton("Search");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+////////////////////////////////////////////////////////////////////////	
+				searchCustomer();
+			}
+		});
+		btnSearch.setBounds(350, 401, 79, 23);
+		contentPane.add(btnSearch);
+		
+		JButton btnChoose = new JButton("Choose");
+		btnChoose.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+////////////////////////////////////////////////////////////////////////	
+				closingWindow();
+			}
+		});
+		btnChoose.setBounds(350, 430, 79, 23);
+		contentPane.add(btnChoose);
+		
+		
 		
 		txt_ID = new JTextField();
 		txt_ID.setEditable(false);
@@ -239,9 +265,26 @@ public class CustomerFrom extends JInternalFrame implements ICustomer {
 		});
 		scrollPane.setViewportView(table);
 		
-		showTable();
+		showTable("SELECT * FROM Customer");
 	}
-
+	public void closingWindow(){
+		
+		int row = table.getSelectedRow();
+		if(row>-1){
+			int idc = Integer.parseInt((String) table.getValueAt(row, 0));
+			String txt_Name = (String) table.getValueAt(row, 1);
+			String txt_Phone = (String) table.getValueAt(row, 2);
+			String txt_Address = (String) table.getValueAt(row, 3);
+			String txt_email = (String) table.getValueAt(row, 4);
+			String txt_Passport = (String) table.getValueAt(row, 5);
+			((ReservationForm)owner).updateCustomerInfo(idc, txt_Name, txt_Address, txt_Phone, txt_Passport, txt_email);
+			this.setVisible(false);
+			desktop.remove(this);
+		}
+		
+		
+		
+	}
 	@Override
 	public boolean addCustomer() {
 		ConnectData ds=new ConnectData();
@@ -257,7 +300,7 @@ public class CustomerFrom extends JInternalFrame implements ICustomer {
 		if(ds.queryExcuteUpdate(sql_insert))
 		{
 			JOptionPane.showMessageDialog(null,"Successfull");
-			showTable();
+			showTable("SELECT * FROM Customer");
 		}
 		else
 
@@ -287,7 +330,7 @@ public class CustomerFrom extends JInternalFrame implements ICustomer {
 		if(ds.queryExcuteUpdate(sql_insert))					
 		{
 			JOptionPane.showMessageDialog(null,"Successfull");
-			showTable();
+			showTable("SELECT * FROM Customer");
 			
 		}
 		else					
@@ -303,9 +346,8 @@ public class CustomerFrom extends JInternalFrame implements ICustomer {
 		return false;	
 	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static void showTable() {
+	public static void showTable(String newSQL) {
 		// TODO Auto-generated method stub
-		@SuppressWarnings({ "rawtypes", "unchecked" })
 		Vector<String> rowHeader = new Vector(); 				
 		rowHeader.add ("ID"); 
 		rowHeader.add ("Name"); 
@@ -318,7 +360,7 @@ public class CustomerFrom extends JInternalFrame implements ICustomer {
 		table.setModel(model); 				
 		ConnectData ds=new ConnectData();
 		ds.connect();			
-		String newSQL="SELECT * FROM Customer"; 
+		
 		try { 
 			ResultSet rs =ds.ExcuteQuery(newSQL); 
 			Vector rowData; 				
@@ -378,7 +420,7 @@ public class CustomerFrom extends JInternalFrame implements ICustomer {
 		String sql_insert="delete from Customer where custID='"+ID+"'";
 		if(ds.queryExcuteUpdate(sql_insert)){
 			JOptionPane.showMessageDialog(null,"delete Successfull");
-			showTable();}
+			showTable("SELECT * FROM Customer");}
 		else
 			JOptionPane.showMessageDialog(null,"delete fail");
 
@@ -392,6 +434,17 @@ public class CustomerFrom extends JInternalFrame implements ICustomer {
 		return false;
 	}
 
+	public void searchCustomer(){
+		ConnectData ds=new ConnectData();
+		ds.connect();
+		String cname=txt_Name.getText();
+		String sql_search="select * from Customer where custName like '%"+cname+"%'";
+		
+		showTable(sql_search);
+	}
+		
+	
+	
 	public static void updateField() {
 		int row = table.getSelectedRow();
 		txt_ID.setText((String) table.getValueAt(row, 0));

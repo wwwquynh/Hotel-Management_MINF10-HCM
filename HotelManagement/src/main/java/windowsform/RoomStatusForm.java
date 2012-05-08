@@ -20,6 +20,7 @@ public class RoomStatusForm extends JInternalFrame {
 	 *
 	 */
 	private int selectedRoomID;
+	private int selectedResID;
 	MDIDesktopPane desktop;
 	private static final long serialVersionUID = 1L;
   GridLayout gridLayout1 = new GridLayout();
@@ -53,10 +54,11 @@ public class RoomStatusForm extends JInternalFrame {
   JLabel jLabel6 = new JLabel();
   JLabel jLabel7 = new JLabel();
   JLabel jLabel8 = new JLabel();
-
-  public RoomStatusForm(MDIDesktopPane desktop) {
+  JInternalFrame owner;
+  
+  public RoomStatusForm(MDIDesktopPane desktop, JInternalFrame owner) {
     try {
-  	 
+  	 this.owner = owner;
       jbInit();
       this.desktop = desktop;
       this.setClosable(true);
@@ -72,6 +74,27 @@ public class RoomStatusForm extends JInternalFrame {
     }
   }
 
+  public void updateRoomLayout(){
+	 
+	  try {
+		  this.jPanel1.removeAll();
+		  jPanel1.add(pnFloor2, null);
+		    pnFloor2.add(jLabel2, null);
+		    jPanel1.add(pnFloor3, null);
+		    pnFloor3.add(jLabel3, null);
+		    jPanel1.add(pnFloor5, null);
+		    pnFloor5.add(jLabel5, null);
+		    jPanel1.add(pnFloor4, null);
+		    pnFloor4.add(jLabel4, null);
+		    jPanel1.add(pnFloor1, null);
+		    pnFloor1.add(jLabel1, null);
+		layoutRoom();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+  }
+  
   private void layoutRoom() throws SQLException {
 	  ResultSet rs = Room.getAllRoom();
 	  while(rs.next()){
@@ -103,6 +126,7 @@ public class RoomStatusForm extends JInternalFrame {
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
 				selectedRoomID = rCont.room.getRoomID();
+				selectedResID = rCont.room.getResID();
 				if(e.isPopupTrigger()){
 					RoomControl rc = (RoomControl)e.getComponent();
 					switch(rc.room.getRoomStatusID()){
@@ -143,13 +167,28 @@ public class RoomStatusForm extends JInternalFrame {
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 				selectedRoomID = rCont.room.getRoomID();
+				selectedResID = rCont.room.getResID();
 				//System.out.println();
+				if(e.getClickCount()==2 && owner!=null){
+					selectedRoomID = rCont.room.getRoomID();
+					closingForm();
+				}
 			}
 		});
 
 	  }
   }
-
+  public void closingForm(){
+	  this.setVisible(false);
+	  ((ReservationForm)owner).updateRoomInfo(selectedRoomID);
+	  desktop.remove(this);
+  }
+  
+  private void callResForm(boolean isReservation, int resrvID){
+	  ReservationForm res = new ReservationForm(this, desktop, selectedRoomID, isReservation, resrvID);//true: res. 0: new
+		desktop.add(res);
+  }
+  
   private void jbInit() throws Exception {
 	  this.setMinimumSize(new Dimension(100, 100));
 
@@ -218,8 +257,8 @@ public class RoomStatusForm extends JInternalFrame {
     jPanel1.add(jLabel8, null);
     this.getContentPane().add(jPanel1, null);
 
-    popAvailable.add(miRes);
-    popAvailable.add(miCheckIn);
+    popAvailable.add(miRes);//ok
+    popAvailable.add(miCheckIn);//ok
     popAvailable.add(miUpdateAvaiServ);
 
     popResv.add(miCheckInWithResv);
@@ -227,21 +266,32 @@ public class RoomStatusForm extends JInternalFrame {
 
     popOcc.add(miCheckOut);
     popOcc.add(miAddMoreServ);
+    
     miRes.addActionListener(new ActionListener() {
 
 		public void actionPerformed(ActionEvent arg0) {
-			
-			ReservationForm res = new ReservationForm(desktop, selectedRoomID);
-			desktop.add(res);
+			callResForm(true, 0);
+			//ReservationForm res = new ReservationForm(this, desktop, selectedRoomID, true, 0);//true: res. 0: new
+			//desktop.add(res);
 		}
 	});
     
     miCheckIn.addActionListener(new ActionListener() {
 
 		public void actionPerformed(ActionEvent arg0) {
-			
-			CheckinForm res = new CheckinForm(desktop, selectedRoomID);
-			desktop.add(res);
+			callResForm(false, 0);
+			//ReservationForm res = new ReservationForm(desktop, selectedRoomID, false, 0);//checkin, 0: new also
+			//desktop.add(res);
+		}
+	});
+    
+    miCheckInWithResv.addActionListener(new ActionListener() {
+    	//checkin with available reservation
+    	//reservation ID where?
+    	public void actionPerformed(ActionEvent arg0) {
+    		callResForm(false, selectedResID);
+    		//ReservationForm res = new ReservationForm(desktop, selectedRoomID, false, selectedResID);//checkin, load reservation
+			//desktop.add(res);
 		}
 	});
     

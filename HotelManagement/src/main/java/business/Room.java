@@ -15,6 +15,7 @@ public class Room {
 	double roomFee;
 	int roomStatusID;
 	int roomOrder;
+	int resID;
 	public int getRoomOrder() {
 		return roomOrder;
 	}
@@ -37,11 +38,20 @@ public class Room {
 			setRoomNoOfChild(rs.getInt("roomNoOfChild"));
 			setRoomOrder(rs.getInt("roomOrder"));
 			setRoomStatusID(rs.getInt("roomStatusID"));
+			setResID(rs.getInt("resID"));
 		}catch(Exception ex){
 			
 		}
 		
 	}
+	public int getResID() {
+		return resID;
+	}
+
+	public void setResID(int resID) {
+		this.resID = resID;
+	}
+
 	public int getRoomID() {
 		return roomID;
 	}
@@ -113,6 +123,7 @@ public class Room {
 				this.roomNoOfAdult = rs.getInt("roomNoOfAdult");
 				this.roomFee = rs.getDouble("roomFee");
 				this.roomStatusID = rs.getInt("roomStatusID");
+				this.resID = rs.getInt("resID");
 			}
 			conn.dispose();
 			
@@ -141,6 +152,13 @@ public class Room {
 	public static void updateStatus(int roomID, int roomStatusID){
 		ConnectData cnn = new ConnectData();
 		String sql = "update Room set roomStatusID = " + roomStatusID + " where roomID = " + roomID;
+		cnn.connect();
+		cnn.queryExcuteUpdate(sql);	
+	}
+	
+	public static void updateReservationOcc(int roomID, int resID){
+		ConnectData cnn = new ConnectData();
+		String sql = "update Room set resID = " + resID + " where roomID = " + roomID;
 		cnn.connect();
 		cnn.queryExcuteUpdate(sql);	
 	}

@@ -147,7 +147,7 @@ public class CheckinForm extends JInternalFrame{
 	  tblModelRes = new DefaultTableModel(dataEmpty, colRes);
 	  
     this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-    this.setTitle("Reservation");
+    this.setTitle("Checkin");
     this.setPreferredSize(new Dimension(800, 600));
     this.getContentPane().setLayout(borderLayout1);
     jPanel1.setBorder(BorderFactory.createLineBorder(Color.black));

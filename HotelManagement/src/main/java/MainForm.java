@@ -20,6 +20,7 @@ import javax.swing.JTextArea;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import windowsform.CustomerFrom;
 import windowsform.LoginForm;
 import windowsform.ReservationForm;
 import windowsform.RoomStatusForm;
@@ -31,7 +32,7 @@ public class MainForm extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 
-public MDIDesktopPane desktop = new MDIDesktopPane();
+public MDIDesktopPane desktop;
 
   private JMenuBar menuBar = new JMenuBar();
   
@@ -60,6 +61,7 @@ public MDIDesktopPane desktop = new MDIDesktopPane();
   private JScrollPane scrollPane = new JScrollPane();
 
   public MainForm() {
+	  desktop = new MDIDesktopPane();
     menuBar.add(mnuFile);
     menuBar.add(mnuMasterData);
     menuBar.add(mnuManagement);
@@ -100,14 +102,13 @@ public MDIDesktopPane desktop = new MDIDesktopPane();
     miLogin.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent ae) {
         	LoginForm fct = new LoginForm();
-          desktop.add(fct);
-          
+          desktop.add(fct); 
         }
       });
     
     miReservation.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent ae) {
-        	ReservationForm fct = new ReservationForm();
+        	ReservationForm fct = new ReservationForm(null, desktop, true, 0);
           desktop.add(fct);
           
         }
@@ -115,9 +116,18 @@ public MDIDesktopPane desktop = new MDIDesktopPane();
     
     miRoomStatus.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent ae) {
-        	RoomStatusForm rsf = new RoomStatusForm(desktop);
+        	RoomStatusForm rsf = new RoomStatusForm(desktop, null);
         	
           desktop.add(rsf);
+          
+        }
+      });
+    
+    miCustomer.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent ae) {
+        	CustomerFrom rsf = new CustomerFrom(desktop, null);
+        	
+        	desktop.add(rsf);
           
         }
       });

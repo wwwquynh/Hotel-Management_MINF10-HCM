@@ -1,5 +1,6 @@
 package business;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import connect.sqlite.ConnectData;
 
@@ -34,5 +35,16 @@ public class ReservationDetailService {
 			System.out.println(e.getMessage());
 		}
 		return reID;
+	}
+	
+	public static ResultSet getExtraServices(int resID){
+		ConnectData conn = new ConnectData();
+		conn.connect();
+		String sql = "select sv.serviceID, sv.serviceName, sv.serviceAmount from ReservationDetailServices rds join ReservationDetail rd ";
+				sql += "  on rds.resDetailID = rd.resDetailID ";
+				sql += " left join Service sv on rds.serviceID = sv.serviceID ";
+				sql += " where rd.resID = " + resID;
+	
+		return conn.ExcuteQuery(sql);		
 	}
 }
