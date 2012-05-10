@@ -23,6 +23,7 @@ import javax.swing.event.MenuListener;
 import windowsform.CustomerFrom;
 import windowsform.LoginForm;
 import windowsform.ReservationForm;
+import windowsform.RoomFrom;
 import windowsform.RoomStatusForm;
 
 import formcontroller.*;
@@ -126,6 +127,16 @@ public MDIDesktopPane desktop;
     miCustomer.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent ae) {
         	CustomerFrom rsf = new CustomerFrom(desktop, null);
+        	
+        	desktop.add(rsf);
+          
+        }
+      });
+    
+    miRoom.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent ae) {
+        	//RoomFrom rsf = new RoomFrom(desktop, null);
+        	RoomFrom rsf = new RoomFrom();
         	
         	desktop.add(rsf);
           

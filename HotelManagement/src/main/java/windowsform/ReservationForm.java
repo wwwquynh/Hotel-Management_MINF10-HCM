@@ -172,7 +172,7 @@ public class ReservationForm extends JInternalFrame{
 	  try {
 		  int i=0;
 		  while(rs.next()){
-			tblModelAvailable.insertRow(++i, new Object[]{rs.getInt("serviceID"), rs.getString("serviceName"), rs.getDouble("serviceAmount")});
+			tblModelAvailable.insertRow(i++, new Object[]{rs.getInt("serviceID"), rs.getString("serviceName"), rs.getDouble("serviceAmount")});
 		  }
 	} catch (SQLException e) {
 		// TODO Auto-generated catch block
@@ -185,7 +185,7 @@ public class ReservationForm extends JInternalFrame{
 		  ResultSet rs = ReservationDetailService.getExtraServices(resID);
 		  int i = 0;
 		  while(rs.next()){
-			  tblModelService.insertRow(++i, new Object[]{rs.getInt("serviceID"), rs.getString("serviceName"), rs.getDouble("serviceAmount")});
+			  tblModelService.insertRow(i++, new Object[]{rs.getInt("serviceID"), rs.getString("serviceName"), rs.getDouble("serviceAmount")});
 		  }
 	  }
 	  catch(Exception ex){
@@ -206,7 +206,7 @@ public class ReservationForm extends JInternalFrame{
 		  double totalService = 0;
 		  while(rs.next()){
 			totalService += rs.getDouble("serviceAmount");
-			tblModelAvailable.insertRow(++i, new Object[]{rs.getInt("serviceID"), rs.getString("serviceName"), rs.getDouble("serviceAmount")});
+			tblModelAvailable.insertRow(i++, new Object[]{rs.getInt("serviceID"), rs.getString("serviceName"), rs.getDouble("serviceAmount")});
 		  }
 		  totalService += room.getRoomFee();
 		this.txtTotalCost.setText(totalService+"");
@@ -218,14 +218,14 @@ public class ReservationForm extends JInternalFrame{
  
 
   private void jbInit() throws Exception {
-	  String dataEmpty[][] = {{}};
+	  //String dataEmpty[][] = {{}};
 	  String col[] = {"Service ID", "Service Name", "Service Amt"};
 	  
 	  String colRes[] = {"Reservation ID", "Customer", "Address", "Phone", "Passport/ID", "Room", "From", "To"};
 
-	  tblModelAvailable = new DefaultTableModel(dataEmpty, col);
-	  tblModelService = new DefaultTableModel(dataEmpty, col);
-	  tblModelRes = new DefaultTableModel(dataEmpty, colRes);
+	  tblModelAvailable = new DefaultTableModel(null, col);
+	  tblModelService = new DefaultTableModel(null, col);
+	  tblModelRes = new DefaultTableModel(null, colRes);
 	  
 	  this.addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
 	      public void internalFrameClosing(InternalFrameEvent e) {
@@ -402,7 +402,7 @@ public class ReservationForm extends JInternalFrame{
   }
 
   void btnAddMoreService_actionPerformed(ActionEvent e) {
-	  	ServiceChoose sc = new ServiceChoose(this);
+	  	ServiceChoose sc = new ServiceChoose(this, true);
 	  	try{
 	  		desktop.add(sc);
 	  	}catch(Exception ex){
@@ -418,7 +418,7 @@ public class ReservationForm extends JInternalFrame{
 		  while(rs.next()){
 //			  String colRes[] = {"Reservation ID", "Customer", "Address", "Phone", "Passport/ID", "Room", "From", "To"};
 		
-			  tblModelRes.insertRow(++i, new Object[]{rs.getInt("resID"), rs.getString("custName"), rs.getString("custAddress"), rs.getString("custPhone"), rs.getString("custPassport"), rs.getString("roomName"), rs.getDate("resDate"), rs.getDate("resLeaveDate")});
+			  tblModelRes.insertRow(i++, new Object[]{rs.getInt("resID"), rs.getString("custName"), rs.getString("custAddress"), rs.getString("custPhone"), rs.getString("custPassport"), rs.getString("roomName"), rs.getDate("resDate"), rs.getDate("resLeaveDate")});
 		  }
 	} catch (SQLException e1) {
 		// TODO Auto-generated catch block

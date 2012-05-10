@@ -295,6 +295,16 @@ public class RoomStatusForm extends JInternalFrame {
 		}
 	});
     
-  }
 
+    miUpdateAvaiServ.addActionListener(new ActionListener() {
+    	public void actionPerformed(ActionEvent arg0) {
+    		callUpdateRoomService();
+		}
+	});
+    
+  }
+  private void callUpdateRoomService(){
+  	AddRoomServiceForm aRoom = new AddRoomServiceForm(this, desktop, selectedRoomID);
+  	desktop.add(aRoom);
+  }
 }

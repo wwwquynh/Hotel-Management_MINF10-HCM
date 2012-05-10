@@ -21,4 +21,11 @@ public class AvailableService {
 		ResultSet rs = cnn.ExcuteQuery(sql);
 		return rs;
 	}
+	
+	public static int addNew(int roomID, int serviceID){
+		ConnectData cnn = new ConnectData();
+		cnn.connect();
+		String sql = "insert into AvailableService values(null, " + roomID + ", " + serviceID + ")";
+		return cnn.queryExcuteUpdateGenerateKey(sql);
+	}
 }

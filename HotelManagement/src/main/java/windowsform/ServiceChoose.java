@@ -35,10 +35,12 @@ public class ServiceChoose extends JInternalFrame{
   Object[][] dataEmpty = {{false, 0, "",0}};
   DefaultTableModel model;
   JTable tblService;
-  ReservationForm rf;
-  public ServiceChoose(ReservationForm rf) {
+  JInternalFrame rf;
+  boolean isRes;
+  public ServiceChoose(JInternalFrame rf, boolean isRes) {
     try {
     	this.rf = rf;
+    	this.isRes = isRes;
       jbInit();
       this.setClosable(true);
       this.setMaximizable(true);
@@ -58,7 +60,7 @@ private void loadAllService(){
 		int i = 0;
 		while(rs.next()){
 			//model.insertRow(++i, new Object[]{false, 8, "serviceName", 8.9});
-			model.insertRow(++i, new Object[]{false, rs.getInt("serviceID"), rs.getString("serviceName"), rs.getDouble("serviceAmount")});
+			model.insertRow(i++, new Object[]{false, rs.getInt("serviceID"), rs.getString("serviceName"), rs.getDouble("serviceAmount")});
 		}
 	} catch (SQLException e) {
 		// TODO Auto-generated catch block
@@ -80,7 +82,7 @@ private void loadAllService(){
     jPanel1.add(btnOk, null);
     this.getContentPane().add(jPanel2, BorderLayout.CENTER);
 
-    model = new DefaultTableModel(dataEmpty, columnNames) {
+    model = new DefaultTableModel(null, columnNames) {
 
 		private static final long serialVersionUID = 1L;
 
@@ -125,15 +127,26 @@ private void loadAllService(){
 	  int rowcount = tblService.getModel().getRowCount();
 	  int j=0;
 	  double total = 0;
-	  for(int i=1; i<rowcount; i++){
+	  for(int i=0; i<rowcount; i++){
 		  if(tblService.getModel().getValueAt(i, 0).toString() == "true"){
-			rf.tblModelService.insertRow(++j, new Object[]{tblService.getModel().getValueAt(i, 1), tblService.getModel().getValueAt(i, 2), tblService.getModel().getValueAt(i, 3)});
-			total += Double.parseDouble(tblService.getModel().getValueAt(i, 3)+ "");
+			  int sevID = (Integer) tblService.getModel().getValueAt(i, 1);
+			  if(isRes){
+				  ((ReservationForm)rf).tblModelService.insertRow(j++, new Object[]{sevID, tblService.getModel().getValueAt(i, 2), tblService.getModel().getValueAt(i, 3)});
+				  total += Double.parseDouble(tblService.getModel().getValueAt(i, 3)+ "");
+		  
+			  }else{
+				  if(!((AddRoomServiceForm)rf).avail.contains(sevID) && !((AddRoomServiceForm)rf).newAdd.contains(sevID)){
+					  ((AddRoomServiceForm)rf).tblModelAvailable.insertRow(j++, new Object[]{sevID, tblService.getModel().getValueAt(i, 2), tblService.getModel().getValueAt(i, 3)});
+					  ((AddRoomServiceForm)rf).newAdd.add(sevID);
+				  }
+			  }
 		  }
 		  
 	  }
-	  double totalcost = Double.parseDouble(rf.txtTotalCost.getText())+ total;
-	  rf.txtTotalCost.setText(totalcost + "");
+	  if(isRes){
+		  double totalcost = Double.parseDouble(((ReservationForm)rf).txtTotalCost.getText())+ total;
+		  ((ReservationForm)rf).txtTotalCost.setText(totalcost + "");
+	  }
 	  this.setVisible(false);
   }
 

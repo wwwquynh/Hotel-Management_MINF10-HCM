@@ -2,6 +2,7 @@ package windowsform;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -27,8 +28,6 @@ import java.awt.event.MouseEvent;
 import java.awt.SystemColor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import java.awt.event.TextListener;
-import java.awt.event.TextEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyAdapter;
@@ -36,7 +35,7 @@ import java.awt.event.KeyEvent;
 
 
 @SuppressWarnings("serial")
-public class RoomFrom extends JFrame {
+public class RoomFrom extends JInternalFrame {
 
 	private JPanel contentPane;
 	private static JTable table;
