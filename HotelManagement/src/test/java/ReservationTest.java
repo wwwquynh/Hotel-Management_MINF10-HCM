@@ -15,20 +15,9 @@ public class ReservationTest {
 	@Test 
 	public void testDataSelectedFromDB(){
 		Reservation resv = new Reservation(1);//select from database
-		assertEquals(2, resv.getCustomerID());
-		assertEquals(2, resv.getNumberOfChild());
+		assertEquals(25, resv.getCustomerID());
+		assertEquals(0, resv.getNumberOfChild());
 	}
 	
-	@Test 
-	public void testGenerateError(){
-		Reservation resv = new Reservation(1);//select from database
-		assertEquals(3, resv.getCustomerID());
-		assertEquals(6, resv.getNumberOfChild());
-	}
-	@Test 
-	public void testGenerateError2(){
-		Reservation resv = new Reservation(1);//select from database
-		assertEquals(3, resv.getCustomerID());
-		assertEquals(6, resv.getNumberOfChild());// http://wiki.cloudbees.com/bin/view/DEV/How+to+use+Private+GitHub+Repositories+with+CloudBees
-	}
+
 }
