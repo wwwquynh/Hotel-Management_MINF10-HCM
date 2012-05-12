@@ -240,7 +240,7 @@ public class Reservation implements IReservation{
 		  sb.append("select res.resID, cus.custName, cus.custAddress, cus.custPhone, cus.custPassport, r.roomName, res.resDate, res.resLeaveDate from Reservation res join Customer cus on res.customerID = cus.custID ");
 		  sb.append(" left join ReservationDetail resDet on res.resID = resDet.resID ");
 		  sb.append(" left join Room r on r.roomID = resDet.roomID ");
-		  sb.append(" where cus.custName like \"%" + custName + "%\"");
+		  sb.append(" where res.bookType = 0 and cus.custName like \"%" + custName + "%\"");
 		  String sql = sb.toString();
 		  System.out.println(sql);
 		return conn.ExcuteQuery(sql);
@@ -264,4 +264,10 @@ public class Reservation implements IReservation{
 
 	}
 	
+	public static void updateAmount(int resID, double amt){
+		String sql = "UPDATE Reservation set preTotalCost = " + amt + " where resID = " + resID;
+		ConnectData conn = new ConnectData();
+		conn.connect();
+		conn.queryExcuteUpdate(sql);
+	}
 } 

@@ -20,7 +20,9 @@ import javax.swing.JTextArea;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import windowsform.AssignTaskForm;
 import windowsform.CustomerFrom;
+import windowsform.EmployeeForm;
 import windowsform.LoginForm;
 import windowsform.ReservationForm;
 import windowsform.RoomFrom;
@@ -149,6 +151,26 @@ public MDIDesktopPane desktop;
         desktop.add(new TextFrame());
       }
     });*/
+    
+    miAssignTask.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent ae) {
+        	//RoomFrom rsf = new RoomFrom(desktop, null);
+        	AssignTaskForm rsf = new AssignTaskForm();
+        	
+        	desktop.add(rsf);
+          
+        }
+      });
+    
+    miEmployee.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent ae) {
+        	//RoomFrom rsf = new RoomFrom(desktop, null);
+        	EmployeeForm rsf = new EmployeeForm();
+        	
+        	desktop.add(rsf);
+          
+        }
+      });
 
   }
 

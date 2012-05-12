@@ -18,6 +18,4 @@ public class ReservationTest {
 		assertEquals(25, resv.getCustomerID());
 		assertEquals(0, resv.getNumberOfChild());
 	}
-	
-
 }

@@ -1,6 +1,5 @@
 package windowsform;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -15,7 +14,8 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.JFormattedTextField;
+
+import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -29,8 +29,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JComboBox;
 
-public class EmployeeForm extends JFrame implements IEmployeeType {
+public class EmployeeForm extends JInternalFrame implements IEmployeeType {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txt_ID;
 	private JTextField txt_Name;
@@ -55,7 +59,7 @@ public class EmployeeForm extends JFrame implements IEmployeeType {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void showTable() {
-		Vector<String> rowHeader = new Vector (); 				
+		Vector<String> rowHeader = new Vector<String> (); 				
 		rowHeader.add ("empID"); 
 		rowHeader.add ("empName");
 		rowHeader.add ("empAddress"); 

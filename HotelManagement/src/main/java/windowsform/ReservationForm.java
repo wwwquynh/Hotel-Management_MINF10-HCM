@@ -412,13 +412,14 @@ public class ReservationForm extends JInternalFrame{
 
   void btnSearch_actionPerformed(ActionEvent e) {
   //serach reservation
+	  tblModelRes.getDataVector().removeAllElements();
 	  try {
 		  ResultSet rs = Reservation.searchReservation(txtCustomerName.getText());
 		  int i = 0;
 		  while(rs.next()){
 //			  String colRes[] = {"Reservation ID", "Customer", "Address", "Phone", "Passport/ID", "Room", "From", "To"};
 		
-			  tblModelRes.insertRow(i++, new Object[]{rs.getInt("resID"), rs.getString("custName"), rs.getString("custAddress"), rs.getString("custPhone"), rs.getString("custPassport"), rs.getString("roomName"), rs.getDate("resDate"), rs.getDate("resLeaveDate")});
+			  tblModelRes.insertRow(i++, new Object[]{rs.getInt("resID"), rs.getString("custName"), rs.getString("custAddress"), rs.getString("custPhone"), rs.getString("custPassport"), rs.getString("roomName"), rs.getString("resDate"), rs.getString("resLeaveDate")});
 		  }
 	} catch (SQLException e1) {
 		// TODO Auto-generated catch block

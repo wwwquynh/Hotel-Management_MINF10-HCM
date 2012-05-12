@@ -12,6 +12,7 @@ import javax.swing.*;
 
 import formcontroller.MDIDesktopPane;
 
+import business.Reservation;
 import business.Room;
 
 public class RoomStatusForm extends JInternalFrame {
@@ -88,7 +89,15 @@ public class RoomStatusForm extends JInternalFrame {
 		    pnFloor4.add(jLabel4, null);
 		    jPanel1.add(pnFloor1, null);
 		    pnFloor1.add(jLabel1, null);
+		    jPanel1.add(pnAvailable, null);
+		    jPanel1.add(pnBooked, null);
+		    jPanel1.add(pnOccupied, null);
+		    jPanel1.add(jLabel6, null);
+		    jPanel1.add(jLabel7, null);
+		    jPanel1.add(jLabel8, null);
 		layoutRoom();
+		
+		this.jPanel1.revalidate();
 	} catch (SQLException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -259,13 +268,22 @@ public class RoomStatusForm extends JInternalFrame {
 
     popAvailable.add(miRes);//ok
     popAvailable.add(miCheckIn);//ok
-    popAvailable.add(miUpdateAvaiServ);
+    popAvailable.add(miUpdateAvaiServ);//ok
 
-    popResv.add(miCheckInWithResv);
+    popResv.add(miCheckInWithResv);//ok
     popResv.add(miCancelResv);
 
     popOcc.add(miCheckOut);
-    popOcc.add(miAddMoreServ);
+    popOcc.add(miAddMoreServ);//ok
+    
+    miAddMoreServ.addActionListener(new ActionListener() {
+
+		public void actionPerformed(ActionEvent arg0) {
+			
+			AddCheckinServiceForm res = new AddCheckinServiceForm(desktop, selectedResID);
+			desktop.add(res);
+		}
+	});
     
     miRes.addActionListener(new ActionListener() {
 
@@ -299,6 +317,22 @@ public class RoomStatusForm extends JInternalFrame {
     miUpdateAvaiServ.addActionListener(new ActionListener() {
     	public void actionPerformed(ActionEvent arg0) {
     		callUpdateRoomService();
+		}
+	});
+    
+    miCancelResv.addActionListener(new ActionListener() {
+    	public void actionPerformed(ActionEvent arg0) {
+    		int response = JOptionPane.showConfirmDialog(null, "Do you want to continue?", "Confirm",
+    		        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+    		if (response == JOptionPane.YES_OPTION) {
+    			//update status of reservation
+    			Reservation.cancelReservation(selectedResID);
+    			Room.updateStatus(selectedRoomID, 1);
+    			//update room Status
+    		      System.out.println("Yes button clicked");
+    		    updateRoomLayout();
+    		    
+    		} 
 		}
 	});
     
