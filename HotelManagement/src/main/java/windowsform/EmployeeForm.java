@@ -20,9 +20,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import javax.swing.JTable;
 
-import business.IEmployeeType;
-import business.KeyValue;
 import connect.sqlite.ConnectData;
+import core.business.IEmployeeType;
+import core.business.KeyValue;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;

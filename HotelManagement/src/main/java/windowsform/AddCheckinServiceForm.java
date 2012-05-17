@@ -17,12 +17,13 @@ import java.sql.SQLException;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import business.Customer;
-import business.Reservation;
-import business.ReservationDetailService;
-import business.Room;
+import core.business.Customer;
+import core.business.Reservation;
+import core.business.ReservationDetailService;
+import core.business.Room;
+import core.formcontroller.MDIDesktopPane;
 
-import formcontroller.MDIDesktopPane;
+
 
 public class AddCheckinServiceForm extends JInternalFrame{
     /**

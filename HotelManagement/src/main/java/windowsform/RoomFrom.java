@@ -8,8 +8,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
-import business.KeyValue;
 import connect.sqlite.ConnectData;
+import core.business.KeyValue;
+
 import java.awt.TextField;
 import java.awt.Button;
 import java.awt.event.ActionListener;

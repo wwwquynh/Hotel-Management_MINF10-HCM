@@ -5,9 +5,9 @@ import java.sql.ResultSet;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
-import business.ICustomer;
 
 import connect.sqlite.IConnectData;
+import core.business.ICustomer;
 
 
 

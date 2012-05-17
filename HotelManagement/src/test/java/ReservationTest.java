@@ -3,7 +3,8 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import business.Reservation;
+import core.business.Reservation;
+
 
 public class ReservationTest {
 

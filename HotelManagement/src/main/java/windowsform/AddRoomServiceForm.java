@@ -31,10 +31,11 @@ import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import business.AvailableService;
-import business.Room;
+import core.business.AvailableService;
+import core.business.Room;
+import core.formcontroller.MDIDesktopPane;
 
-import formcontroller.MDIDesktopPane;
+
 
 public class AddRoomServiceForm extends JInternalFrame{
     /**

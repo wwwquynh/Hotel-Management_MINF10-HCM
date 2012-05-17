@@ -10,21 +10,21 @@ public class TaskUTest {
 	
 	@Test
 	public void setTaskName_Test(){
-		business.Task obj = new business.Task();
+		core.business.Task obj = new core.business.Task();
 		String taskName = "tEst Task NAme";
 		obj.setTaskName(taskName);
 		assertEquals(taskName,obj.getTaskName());
 	}
 	@Test
 	public void setTaskName2_Test(){
-		business.Task obj = new business.Task();
+		core.business.Task obj = new core.business.Task();
 		String taskName = "";
 		obj.setTaskName(taskName);// expected throwing exception
 		assertFalse(obj.getTaskName().equals(taskName));
 	}
 	@Test
 	public void setTaskName3_Test(){
-		business.Task obj = new business.Task();
+		core.business.Task obj = new core.business.Task();
 		String taskName = null;
 		obj.setTaskName(taskName);// expected throwing exception
 		assertFalse(obj.getTaskName() == null);

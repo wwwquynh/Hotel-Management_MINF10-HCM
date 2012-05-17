@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import connect.sqlite.ConnectData;
 import connect.sqlite.SQLItem;
 import connect.sqlite.SQLSupport;
-import business.Employee;
-import business.Reservation;
-import business.ReservationDetail;
-import business.RoomStatus;
-import business.Task;
-import business.ITask;
+import core.business.Employee;
+import core.business.ITask;
+import core.business.Reservation;
+import core.business.ReservationDetail;
+import core.business.RoomStatus;
+import core.business.Task;
 
 
 public class ConsoleTest {

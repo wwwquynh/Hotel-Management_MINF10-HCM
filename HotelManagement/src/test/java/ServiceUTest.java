@@ -3,10 +3,10 @@ import java.sql.ResultSet;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
-import business.Service;
 
 
 import connect.sqlite.IConnectData;
+import core.business.Service;
 
 
 public class ServiceUTest {

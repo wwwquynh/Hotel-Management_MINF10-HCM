@@ -21,8 +21,9 @@ import javax.swing.JTable;
 
 
 
-import business.IEmployeeType;
 import connect.sqlite.ConnectData;
+import core.business.IEmployeeType;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;

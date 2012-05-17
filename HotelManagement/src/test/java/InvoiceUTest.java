@@ -3,8 +3,8 @@
 //import org.easymock.EasyMock;
 //import org.junit.Test;
 
-import business.InvoiceManager;
 import connect.sqlite.IConnectData;
+import core.business.InvoiceManager;
 
 
 

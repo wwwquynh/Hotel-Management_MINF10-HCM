@@ -2,10 +2,11 @@ package windowsform;
 
 
 
-import business.Room;
 import java.awt.*;
 
 import javax.swing.*;
+
+import core.business.Room;
 
 public class RoomControl extends JPanel{
 

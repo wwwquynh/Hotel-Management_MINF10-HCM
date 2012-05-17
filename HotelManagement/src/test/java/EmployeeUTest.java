@@ -13,10 +13,10 @@ import org.easymock.EasyMock;
 import org.junit.Test;
 
 
-import business.Employee;
-import business.Reservation;
 import connect.sqlite.ConnectData;
 import connect.sqlite.IConnectData;
+import core.business.Employee;
+import core.business.Reservation;
 
 public class EmployeeUTest {
 	

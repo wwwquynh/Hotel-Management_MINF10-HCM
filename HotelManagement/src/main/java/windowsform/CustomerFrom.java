@@ -21,10 +21,10 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 
-import business.ICustomer;
 
 import connect.sqlite.ConnectData;
-import formcontroller.MDIDesktopPane;
+import core.business.ICustomer;
+import core.formcontroller.MDIDesktopPane;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

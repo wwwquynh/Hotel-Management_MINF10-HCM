@@ -12,7 +12,8 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-import business.Service;
+import core.business.Service;
+
 
 import java.awt.event.*;
 import java.sql.ResultSet;

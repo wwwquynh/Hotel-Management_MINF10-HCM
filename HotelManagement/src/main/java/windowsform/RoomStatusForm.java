@@ -10,10 +10,11 @@ import java.sql.SQLException;
 
 import javax.swing.*;
 
-import formcontroller.MDIDesktopPane;
+import core.business.Reservation;
+import core.business.Room;
+import core.formcontroller.MDIDesktopPane;
 
-import business.Reservation;
-import business.Room;
+
 
 public class RoomStatusForm extends JInternalFrame {
 
@@ -336,6 +337,17 @@ public class RoomStatusForm extends JInternalFrame {
 		}
 	});
     
+    
+    miCheckOut.addActionListener(new ActionListener() {
+    	public void actionPerformed(ActionEvent arg0) {
+    		callCheckoutForm();
+		}
+	});
+    
+  }
+  private void callCheckoutForm(){
+	  CheckoutForm ckout = new CheckoutForm(this, selectedResID);
+		desktop.add(ckout);
   }
   private void callUpdateRoomService(){
   	AddRoomServiceForm aRoom = new AddRoomServiceForm(this, desktop, selectedRoomID);

@@ -1,6 +1,5 @@
 package windowsform;
 
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -14,32 +13,36 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JButton;
 
-import business.KeyValue;
 import connect.sqlite.ConnectData;
+import core.business.KeyValue;
+
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
-public class AssignTaskForm extends JFrame {
+public class AssignTaskForm extends JInternalFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField txt_ID;
-	private JTextField txt_taskID;
-	private JTextField txt_emp;
+	private static JTextField txt_ID;
+	private static JTextField txt_taskID;
+	private static JTextField txt_emp;
 	private static JTable table;
-	private JTextField txt_Date;
+	private static JTextField txt_Date;
 	private static JComboBox cb_task;
 	private static JComboBox cb_emp;
 	
@@ -56,8 +59,7 @@ public class AssignTaskForm extends JFrame {
 		String newSQL1="SELECT empID,empName FROM Employee";  
 		try { 
 			ResultSet rs =ds.ExcuteQuery(newSQL); 						
-			if (rs != null) while (rs.next()){ 						
-				//cb_roomStatusID.addItem((String)rs.getString("roomStatusName"));
+			if (rs != null) while (rs.next()){				
 				cb_task.addItem(new KeyValue(rs.getString("taskID"),rs.getString("taskName")));
 			} 
 			rs.close(); 
@@ -107,7 +109,10 @@ public class AssignTaskForm extends JFrame {
 					AssignTaskForm frame = new AssignTaskForm();
 					frame.setVisible(true);
 					showTable();
-					showCombo();
+					showCombo();					
+					table.selectAll();
+					updateField();
+				
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -145,6 +150,7 @@ public class AssignTaskForm extends JFrame {
 		contentPane.add(lblAssign);
 		
 		txt_ID = new JTextField();
+		txt_ID.setEditable(false);
 		txt_ID.setBounds(112, 40, 89, 20);
 		contentPane.add(txt_ID);
 		txt_ID.setColumns(10);
@@ -167,68 +173,20 @@ public class AssignTaskForm extends JFrame {
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
+		scrollPane.setColumnHeaderView(table);
+		table.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				updateField();
+			}
+		});
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int row = table.getSelectedRow();
-				txt_ID.setText((String) table.getValueAt(row, 0));
-				txt_taskID.setText((String) table.getValueAt(row, 1));
-				txt_emp.setText((String) table.getValueAt(row, 2));
-				txt_Date.setText((String) table.getValueAt(row, 3));
-								
-				ConnectData ds=new ConnectData();
-				ds.connect();			
-				String value = null;				
-				String ID = (String) table.getValueAt(row,1);				
-				String newSQL="SELECT taskName FROM Task where taskID='" + ID +"'"; 
-
-				String value1 = null;				
-				String empID = (String) table.getValueAt(row,2);				
-				String newSQL1="SELECT empName FROM Employee where empID='" + empID +"'"; 
-				
-				try { 
-					ResultSet rs1 =ds.ExcuteQuery(newSQL1); 						
-					if (rs1 != null) {
-						value1 = (String)rs1.getString("empName");						
-					} 
-					rs1.close(); 
-					//ds.dispose(); 
-				} catch(Exception ex){System.out.println("Error : " + ex);}
-
-				int b=0;
-				for (int i=0; i<cb_emp.getItemCount(); i++){
-					if(((KeyValue)cb_emp.getItemAt(i)).getValue().equals(value1))
-					{
-						b=i;
-						break;
-					}
-				}
-				cb_emp.setSelectedIndex(b);	
-				
-				
-				try { 
-					ResultSet rs =ds.ExcuteQuery(newSQL); 						
-					if (rs != null) {
-						value = (String)rs.getString("taskName");						
-					} 
-					rs.close(); ds.dispose(); 
-				} catch(Exception ex){System.out.println("Error : " + ex);}
-
-				int a=0;
-				for (int i=0; i<cb_task.getItemCount(); i++){
-					if(((KeyValue)cb_task.getItemAt(i)).getValue().equals(value))
-					{
-						a=i;
-						break;
-					}
-				}
-				cb_task.setSelectedIndex(a);
-				 
-				// cb_emp
+				updateField();
 				
 			}
 		});
-		scrollPane.setViewportView(table);
 		
 		JButton btnNew = new JButton("New");
 		btnNew.addActionListener(new ActionListener() {
@@ -382,6 +340,65 @@ public class AssignTaskForm extends JFrame {
 			e1.printStackTrace();
 		}
 		return false;
+	}
+
+
+	private static void updateField() {
+		int row = table.getSelectedRow();
+		txt_ID.setText((String) table.getValueAt(row, 0));
+		txt_taskID.setText((String) table.getValueAt(row, 1));
+		txt_emp.setText((String) table.getValueAt(row, 2));
+		txt_Date.setText((String) table.getValueAt(row, 3));
+						
+		ConnectData ds=new ConnectData();
+		ds.connect();			
+		String value = null;				
+		String ID = (String) table.getValueAt(row,1);				
+		String newSQL="SELECT taskName FROM Task where taskID='" + ID +"'"; 
+
+		String value1 = null;				
+		String empID = (String) table.getValueAt(row,2);				
+		String newSQL1="SELECT empName FROM Employee where empID='" + empID +"'"; 
+		
+		try { 
+			ResultSet rs1 =ds.ExcuteQuery(newSQL1); 						
+			if (rs1 != null) {
+				value1 = (String)rs1.getString("empName");						
+			} 
+			rs1.close(); 
+			//ds.dispose(); 
+		} catch(Exception ex){System.out.println("Error : " + ex);}
+
+		int b=0;
+		for (int i=0; i<cb_emp.getItemCount(); i++){
+			if(((KeyValue)cb_emp.getItemAt(i)).getValue().equals(value1))
+			{
+				b=i;
+				break;
+			}
+		}
+		cb_emp.setSelectedIndex(b);	
+		
+		
+		try { 
+			ResultSet rs =ds.ExcuteQuery(newSQL); 						
+			if (rs != null) {
+				value = (String)rs.getString("taskName");						
+			} 
+			rs.close(); ds.dispose(); 
+		} catch(Exception ex){System.out.println("Error : " + ex);}
+
+		int a=0;
+		for (int i=0; i<cb_task.getItemCount(); i++){
+			if(((KeyValue)cb_task.getItemAt(i)).getValue().equals(value))
+			{
+				a=i;
+				break;
+			}
+		}
+		cb_task.setSelectedIndex(a);
+		 
+		// cb_emp
 	}
 	
 }

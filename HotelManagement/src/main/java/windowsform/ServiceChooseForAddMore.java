@@ -7,8 +7,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import core.business.Service;
 
-import business.Service;
+
 
 import java.awt.event.*;
 import java.sql.ResultSet;

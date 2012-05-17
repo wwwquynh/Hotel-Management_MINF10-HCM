@@ -1,43 +1,149 @@
 package windowsform;
 
-/**
- * <p>Title: </p>
- *
- * <p>Description: </p>
- *
- * <p>Copyright: Copyright (c) 2012</p>
- *
- * <p>Company: </p>
- *
- * @author not attributable
- * @version 1.0
- */
-import javax.swing.JFrame;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Rectangle;
+
+import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JButton;
+import javax.swing.table.DefaultTableModel;
+
+import core.business.AvailableService;
+import core.business.Customer;
+import core.business.Reservation;
+import core.business.ReservationDetailService;
+import core.business.Room;
+
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class CheckoutForm extends JFrame{
+public class CheckoutForm extends JInternalFrame{
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public CheckoutForm() {
+	int resID;
+	int custID;
+	int roomID;
+	JInternalFrame owner;
+	DefaultTableModel tblModelAvailable;
+	 DefaultTableModel tblModelService;
+	public CheckoutForm(JInternalFrame owner, int resID) {
         try {
+        	this.resID = resID;
+        	this.owner = owner;
             jbInit();
+            this.setClosable(true);
+            this.setMaximizable(true);
+            this.setVisible(true);
+            //this.setResizable(true);
+
+            this.setSize(700, 550);
+            loadReservation();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
+	public void loadReservation(){
+
+			  ResultSet rs = Reservation.getReservationInfo(resID);
+			  try {
+				  
+				  while(rs.next()){
+					  this.custID = rs.getInt("customerID");
+					  this.txt_NumOfAdult.setText(rs.getInt("numberOfAdult") +"");
+					  this.txt_NumOFfChild.setText(rs.getInt("numberOfChild")+"");
+					  this.txt_CheckinDate.setText(rs.getDate("resDate")+"");
+					  this.txt_LeaveDate.setText(rs.getDate("resLeaveDate")+"");
+					  
+					  this.txt_Total.setText(rs.getDouble("preTotalCost") + "");  
+					  roomID = rs.getInt("roomID");
+				  }
+			
+				  
+				  //load customer
+				  loadCustomer(custID);
+				  
+			  //load reservation detail room, service
+				  loadRoomDetailOfRes();
+				  loadExtraService(resID);
+			  //load 
+			  
+			  } catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		  
+	  }
+	
+	private void loadExtraService(int resID){
+		  try{
+			  ResultSet rs = ReservationDetailService.getExtraServices(resID);
+			  int i = 0;
+			  double total = 0;
+			  while(rs.next()){
+				  tblModelService.insertRow(i++, new Object[]{rs.getInt("serviceID"), rs.getString("serviceName"), rs.getDouble("serviceAmount")});
+				  total += rs.getDouble("serviceAmount");
+			  }
+			  txt_ServiceFee.setText(total + "");
+		  }
+		  catch(Exception ex){
+			System.out.println(ex.getMessage());  
+		  }
+	  }
+	private void loadCustomer(int custID){
+		  Customer cust = new Customer(custID);
+		  this.txt_CustName.setText(cust.getCustName());
+		  this.txt_CustAddress.setText(cust.getCustAddress());
+		  this.txt_CustPassport.setText(cust.getCustPassport());
+		  this.txt_CustPhone.setText(cust.getCustPhone());
+		  
+	  }
+	
+	private void loadRoomDetailOfRes(){
+		  Room room = new Room(roomID);
+
+		  this.txt_Room.setText(room.getRoomName());
+		  this.txt_RoomFee.setText(room.getRoomFee()+"");
+		  ResultSet rs = AvailableService.getAvailableServiceByRoom(roomID);
+		  try {
+			  int i=0;
+			  
+			  while(rs.next()){
+				tblModelAvailable.insertRow(i++, new Object[]{rs.getInt("serviceID"), rs.getString("serviceName"), rs.getDouble("serviceAmount")});
+				
+			  }
+			  
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	  }
+	
     private void jbInit() throws Exception {
+    	String col[] = {"Service ID", "Service Name", "Service Amt"};
+    	tblModelAvailable = new DefaultTableModel(null, col);
+  	  tblModelService = new DefaultTableModel(null, col);
+	  	tblExtraService = new JTable(tblModelService){
+			private static final long serialVersionUID = 1L;
+			public boolean isCellEditable(int rowIndex, int colIndex) {
+			  return false; //Disallow the editing of any cell
+		}};
+		
+		tblAvailableService = new JTable(tblModelAvailable){
+			private static final long serialVersionUID = 1L;
+			public boolean isCellEditable(int rowIndex, int colIndex) {
+			  return false; //Disallow the editing of any cell
+		}};
         this.getContentPane().setLayout(gridLayout1);
         jLabel2.setFont(new java.awt.Font("Tahoma", Font.BOLD, 15));
         jLabel2.setText("Check Out");
@@ -64,7 +170,10 @@ public class CheckoutForm extends JFrame{
         jLabel12.setBounds(new Rectangle(25, 406, 108, 26));
         jLabel13.setText("Total");
         jLabel13.setBounds(new Rectangle(25, 431, 84, 31));
+        jScrollPane1 = new JScrollPane(tblExtraService);
         jScrollPane1.setBounds(new Rectangle(348, 233, 305, 133));
+        
+        jScrollPane2 = new JScrollPane( tblAvailableService);
         jScrollPane2.setBounds(new Rectangle(26, 234, 305, 133));
         jLabel14.setText("Extra Services");
         jLabel14.setBounds(new Rectangle(354, 203, 101, 22));
@@ -132,8 +241,8 @@ public class CheckoutForm extends JFrame{
         jPanel1.add(btn_Print);
         jPanel1.add(btn_Cancel);
         jPanel1.add(btn_Ok);
-        jScrollPane1.getViewport().add(jTable2);
-        jScrollPane2.getViewport().add(jTable3);
+        //jScrollPane1.getViewport().add(tblExtraService);
+        //jScrollPane2.getViewport().add(jTable3);
         
         this.getContentPane().add(jPanel1);
         jLabel1.setText("Customer");
@@ -156,11 +265,11 @@ public class CheckoutForm extends JFrame{
     JLabel jLabel11 = new JLabel();
     JLabel jLabel12 = new JLabel();
     JLabel jLabel13 = new JLabel();
-    JTable jTable1 = new JTable();
-    JScrollPane jScrollPane1 = new JScrollPane();
-    JTable jTable2 = new JTable();
-    JScrollPane jScrollPane2 = new JScrollPane();
-    JTable jTable3 = new JTable();
+    JTable tblAvailableService;
+    JScrollPane jScrollPane1;
+    JTable tblExtraService;
+    JScrollPane jScrollPane2;
+
     JLabel jLabel14 = new JLabel();
     JLabel txt_CustName = new JLabel();
     JLabel txt_CustPassport = new JLabel();
@@ -178,7 +287,12 @@ public class CheckoutForm extends JFrame{
     JButton btn_Ok = new JButton();
     JButton btn_Cancel = new JButton();
     public void btn_Ok_actionPerformed(ActionEvent e) {
-
+    	//update res Status to complete
+    	Reservation.makeComplete(resID);
+    	//update room Status to free
+    	Room.updateStatus(roomID, 1);
+    	JOptionPane.showMessageDialog(null, "Check-out completed.");
+    	((RoomStatusForm)owner).updateRoomLayout();
     }
 
     public void btn_Print_actionPerformed(ActionEvent e) {

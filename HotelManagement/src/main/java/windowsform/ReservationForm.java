@@ -1,19 +1,20 @@
 package windowsform;
 
-import datechooser.*;
 
-import formcontroller.MDIDesktopPane;
 
 import javax.swing.*;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.table.DefaultTableModel;
 
-import business.AvailableService;
-import business.Customer;
-import business.Reservation;
-import business.ReservationDetail;
-import business.ReservationDetailService;
-import business.Room;
+import core.business.AvailableService;
+import core.business.Customer;
+import core.business.Reservation;
+import core.business.ReservationDetail;
+import core.business.ReservationDetailService;
+import core.business.Room;
+import core.datechooser.*;
+import core.formcontroller.MDIDesktopPane;
+
 
 import java.awt.*;
 import java.awt.event.*;

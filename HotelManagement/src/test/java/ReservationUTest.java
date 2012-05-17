@@ -7,11 +7,11 @@ import org.easymock.EasyMock;
 import org.junit.Test;
 
 
-import business.IReservation;
-import business.Reservation;
 
 import connect.sqlite.ConnectData;
 import connect.sqlite.IConnectData;
+import core.business.IReservation;
+import core.business.Reservation;
 
 
 
