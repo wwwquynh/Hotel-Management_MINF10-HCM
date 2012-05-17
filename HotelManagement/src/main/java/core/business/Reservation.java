@@ -278,4 +278,15 @@ public class Reservation implements IReservation{
 		conn.queryExcuteUpdate(sql);
 
 	}
+	
+	public ResultSet getReservatedList() {
+		// TODO Auto-generated method stub
+		String sql = "Select * from Reservation";
+		ResultSet result = null;
+		if (conn.connect()){
+			result = conn.ExcuteQuery(sql);
+		}
+		return result;
+	}
+
 } 
