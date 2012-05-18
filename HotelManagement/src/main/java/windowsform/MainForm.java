@@ -72,7 +72,7 @@ public MDIDesktopPane desktop;
     mnuFile.add(miLogin);
     mnuFile.add(miExit);
     
-    mnuMasterData.add(miHotel);
+    //mnuMasterData.add(miHotel);
     mnuMasterData.add(miRoom);
     mnuMasterData.add(miEmployee);
     //mnuMasterData.add(miEmpType);
