@@ -72,7 +72,7 @@ public class CustomerUTest {
 		IConnectData mockconnection = EasyMock.createNiceMock(IConnectData.class);
 
 		CustomerManager obj = new CustomerManager(mockconnection);
-		Customer cus = new Customer(0, "", "", "", "", "");
+		Customer cus = new Customer(-1, "", "", "", "", "");
 		EasyMock.replay(mockconnection); 
 		assertFalse(obj.searchCustomer(cus) == null);
 		EasyMock.verify(mockconnection); 

@@ -66,36 +66,23 @@ public class ReservationUTest {
     public void setResDate_Test() {
         IConnectData mockconnection = new ConnectData();
         Reservation obj = new Reservation(mockconnection);
-        obj.setResDate(null);
+        Date date = new Date(12345);
+        obj.setResDate(date);
         assertNotNull(obj.getResDate());
     }
 
     @Test
     public void getResDate_Test() {
-        IConnectData mockconnection = new ConnectData();
-        Reservation obj = new Reservation(mockconnection);
+        
+        Reservation obj = new Reservation(1);
+        
         assertNotNull(obj.getResDate());
-        obj.setResDate(null);
-        assertNotNull(obj.getResDate());
+        //obj.setResDate(null);
+        //assertNotNull(obj.getResDate());
     }
 
-    @Test
-    public void setResLeaveDate_Test() {
-        IConnectData mockconnection = new ConnectData();
-        Reservation obj = new Reservation(mockconnection);
-        obj.setResLeaveDate(null);
-        assertNotNull(obj.getResLeaveDate());
-    }
-
-    @Test
-    public void getResLeaveDate_Test() {
-        IConnectData mockconnection = new ConnectData();
-        Reservation obj = new Reservation(mockconnection);
-        assertNotNull(obj.getResLeaveDate());
-        obj.setResLeaveDate(null);
-        assertNotNull(obj.getResLeaveDate());
-    }
-
+    
+   
     @Test
     public void addReservation_NumberOfAdult_Test() {
         IConnectData mockconnection = new ConnectData();

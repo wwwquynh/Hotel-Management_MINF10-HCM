@@ -6,10 +6,12 @@ import static org.junit.Assert.assertFalse;
 import java.sql.ResultSet;
 
 import org.easymock.EasyMock;
+import org.junit.Assert;
 import org.junit.Test;
 
 import core.business.IRoom;
 import core.business.IRoomManager;
+import core.business.Room;
 import core.business.RoomManager;
 import core.business.RoomStatus;
 import connect.sqlite.IConnectData;
@@ -83,5 +85,11 @@ public class RoomUTest {
         IRoomManager rm = new RoomManager(mockconnection);
         assertFalse(rm.addRoom(null));
 
+    }
+    
+    @Test
+    public void selectRoom(){
+    	Room room = new Room(2);
+    	Assert.assertEquals(2, room.getRoomID());
     }
 }
