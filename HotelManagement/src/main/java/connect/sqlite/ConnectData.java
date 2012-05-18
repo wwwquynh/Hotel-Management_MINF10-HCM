@@ -10,7 +10,7 @@ public class ConnectData implements IConnectData{
 	public boolean connect(){
 		try{
 			
-			//String url="jdbc:sqlite:E:\\HotelManagementProj\\DB\\hotel.s3db";
+			//String url="jdbc:sqlite:D:\\t\\Hotel-Management_MINF10-HCM\\HotelManagement\\Database\\Hotel.s3db";
 			//String url="jdbc:sqlite:Database\\hotel.s3db";
 			
 			String url = "jdbc:sqlite:"+System.getProperty("user.dir")+"\\Database\\Hotel.s3db";

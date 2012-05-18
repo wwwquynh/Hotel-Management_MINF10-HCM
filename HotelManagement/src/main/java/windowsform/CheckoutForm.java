@@ -62,8 +62,8 @@ public class CheckoutForm extends JInternalFrame{
 					  this.custID = rs.getInt("customerID");
 					  this.txt_NumOfAdult.setText(rs.getInt("numberOfAdult") +"");
 					  this.txt_NumOFfChild.setText(rs.getInt("numberOfChild")+"");
-					  this.txt_CheckinDate.setText(rs.getDate("resDate")+"");
-					  this.txt_LeaveDate.setText(rs.getDate("resLeaveDate")+"");
+					  this.txt_CheckinDate.setText(rs.getString("resDate"));
+					  this.txt_LeaveDate.setText(rs.getString("resLeaveDate"));
 					  
 					  this.txt_Total.setText(rs.getDouble("preTotalCost") + "");  
 					  roomID = rs.getInt("roomID");

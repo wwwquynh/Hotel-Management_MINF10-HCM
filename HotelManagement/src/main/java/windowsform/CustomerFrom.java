@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
@@ -20,6 +19,7 @@ import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
+import javax.swing.WindowConstants;
 
 
 import connect.sqlite.ConnectData;
@@ -76,7 +76,8 @@ public class CustomerFrom extends JInternalFrame implements ICustomer {
 		this.setClosable(true);
 		this.setMaximizable(true);
 		this.setVisible(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		 this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		    
 		setBounds(100, 100, 450, 497);
 		contentPane = new JPanel();
 		contentPane.addAncestorListener(new AncestorListener() {

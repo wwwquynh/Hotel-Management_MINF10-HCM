@@ -465,7 +465,7 @@ public class ReservationForm extends JInternalFrame{
 
 		  if(resrvID==0)//create res
 		  {
-//create new customer if code = 0
+			  //create new customer if code = 0
 			  
 			  if(custID == 0){
 				  Customer cus = new Customer(0, txtCustomerName.getText(), txtAddress.getText(), txtPhone.getText(), "", txtIDCardNumber.getText());

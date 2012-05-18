@@ -40,7 +40,7 @@ public MDIDesktopPane desktop;
   private JMenu mnuReport = new JMenu("Report");
   
   //private JMenuItem newMenu = new JMenuItem("New");
-  private JMenuItem miLogin = new JMenuItem("Login");
+  public JMenuItem miLogin = new JMenuItem("Login");
   private JMenuItem miExit = new JMenuItem("Exit");
   
   JMenuItem miHotel = new JMenuItem("Hotel");
@@ -54,7 +54,7 @@ public MDIDesktopPane desktop;
   JMenuItem miRoomStatus = new JMenuItem("Room Status");
   JMenuItem miAssignTask = new JMenuItem("Assign Task");
   JMenuItem miEmpType = new JMenuItem("Employee Type");
-  
+
   private JMenuItem testForm = new JMenuItem("testForm");
   
   
@@ -82,7 +82,7 @@ public MDIDesktopPane desktop;
     mnuManagement.add(miCustomer);
     mnuManagement.add(miReservation);
     mnuManagement.add(miRoomStatus);
-    mnuManagement.add(miAssignTask);
+    //mnuManagement.add(miAssignTask);
     
     setJMenuBar(menuBar);
     setTitle("PUF Hotel");
@@ -209,12 +209,25 @@ public MDIDesktopPane desktop;
 	  this.dispose();
   }
   public void callRoomStatus(){
-	  RoomStatusForm rsf = new RoomStatusForm(desktop, null);
-  		desktop.add(rsf);
+	 
+		  RoomStatusForm rsf = new RoomStatusForm(desktop, null);
+  			desktop.add(rsf);
+  			
   }
   private void callLoginForm(){
+	   if(miLogin.getText() == "Login"){
   	LoginForm fct = new LoginForm(desktop, this);
       desktop.add(fct); 
+      
+      //miLogin.setText("Logout");
+		return;
+	}
+if(miLogin.getText() == "Logout"){
+	  setMenuStatus(false);
+	  desktop.removeAll();
+	  desktop.repaint();
+		miLogin.setText("Login");
+	}
   }
   public void setMenuStatus(boolean arg0){
 	  this.mnuMasterData.setEnabled(arg0);

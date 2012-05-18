@@ -164,7 +164,13 @@ public class Employee implements IEmployee{
 			}
 			*/
 		}
-		
+		try {
+			conn.dispose();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return 0;
 	}
 	
@@ -173,15 +179,17 @@ public class Employee implements IEmployee{
 	}
 	
 	public static boolean login(String uname, String pass){
+		ConnectData conn = new ConnectData();
 		try {
 			
 			String sql = "select  * from Employee where empUserName = '" + uname + "' and empPassword = '" + pass + "'";
-			ConnectData conn = new ConnectData();
+			
 			conn.connect();
 			ResultSet rs = conn.ExcuteQuery(sql);
 		
 			while(rs.next()){
 				JOptionPane.showMessageDialog(null, "Halo " + rs.getString("empName"));
+				conn.dispose();
 				return true;
 			}
 			JOptionPane.showMessageDialog(null, "Invalid username, password");
@@ -190,6 +198,7 @@ public class Employee implements IEmployee{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+	
 			return false;
 		}
 		return false;

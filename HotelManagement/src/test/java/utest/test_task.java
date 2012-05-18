@@ -56,4 +56,16 @@ public class test_task {
         boolean result = instance.addRecord();
         assertEquals(expResult, result);
     }
+    /*
+    protected static void backupDb() throws IOException {
+        copyFile(dbFile, dbBackupFile);
+
+    }
+
+    protected static void restoreDb() throws DbException {
+    HmsEntity.DB.closeConnection();
+    dbFile.delete();
+        dbBackupFile.renameTo(dbFile);
+        HmsEntity.DB.createConnection();
+    }*/
 }

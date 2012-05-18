@@ -79,6 +79,7 @@ void btnLogin_actionPerformed(ActionEvent e) {
 	  {
 		  ((MainForm)owner).setMenuStatus(true);
 		  ((MainForm)owner).callRoomStatus();
+		  ((MainForm)owner).miLogin.setText("Logout");
 		  this.setVisible(false);
 		  
 		  desktop.remove(this);

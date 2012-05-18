@@ -6,12 +6,12 @@ import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
-import connect.sqlite.ConnectData;
 import core.business.KeyValue;
-
-import java.awt.TextField;
+import connect.sqlite.ConnectData;
 import java.awt.Button;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -29,6 +29,7 @@ import java.awt.event.MouseEvent;
 import java.awt.SystemColor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyAdapter;
@@ -41,6 +42,15 @@ public class RoomFrom extends JInternalFrame {
 	private JPanel contentPane;
 	private static JTable table;
 	private static JComboBox cb_roomStatusID;
+	private static JTextField txt_idroom;
+	private static JTextField txt_roomName;
+	private static JTextField txt_Floor;				
+	private static JTextField txt_roomStatusID;
+	private static JTextField txt_roomNoOfAdult;
+	private static JTextField txt_roomNoOfChild;
+	private static JTextField txt_roomFee;	
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -59,7 +69,10 @@ public class RoomFrom extends JInternalFrame {
 		table.setModel(model); 				
 		ConnectData ds=new ConnectData();
 		ds.connect();			
-		String newSQL="SELECT * FROM Room"; 
+		//String newSQL="SELECT * FROM Room"; 
+		String newSQL="SELECT roomID,roomName,roomFloor, (CASE WHEN roomStatusID='1' THEN 'Available' ELSE 'Unavailable' END) AS roomStatusID, roomNoOfAdult,roomNoOfChild,roomFee FROM Room"; 
+		
+		
 		try { 
 			ResultSet rs =ds.ExcuteQuery(newSQL); 
 			Vector rowData; 				
@@ -104,12 +117,15 @@ public class RoomFrom extends JInternalFrame {
 					RoomFrom frame = new RoomFrom();
 					frame.setVisible(true);
 					showTable();
-					showCombo();
-
+					showCombo();		
+					table.selectAll();
+					comboUpdate();
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
+
 		});
 	}
 
@@ -124,13 +140,14 @@ public class RoomFrom extends JInternalFrame {
 		setContentPane(contentPane);
 
 
-		final TextField txt_idroom = new TextField();
-		txt_idroom.setBounds(219, 58, 148, 22);
+		txt_idroom = new JTextField();
+		txt_idroom.setEditable(false);
+		txt_idroom.setBounds(219, 58, 78, 22);
 
-		final TextField txt_Floor = new TextField();
+		txt_Floor = new JTextField();
 		txt_Floor.setBounds(219, 114, 148, 22);
 
-		final TextField txt_roomName = new TextField();
+		txt_roomName = new JTextField();
 		txt_roomName.setBounds(219, 86, 148, 22);
 
 		Label label = new Label("RoomID");
@@ -142,27 +159,22 @@ public class RoomFrom extends JInternalFrame {
 		Label label_2 = new Label("roomName");
 		label_2.setBounds(56, 86, 84, 22);
 
-		final TextField txt_roomStatusID = new TextField();		
-		txt_roomStatusID.setEditable(false);
-
-		txt_roomStatusID.setBounds(219, 142, 32, 22);
-
 		Label label_3 = new Label("RoomStatusID");
 		label_3.setBounds(56, 142, 127, 22);
 
 		Label label_4 = new Label("roomNoOfAdult");
 		label_4.setBounds(56, 170, 115, 22);
 
-		final TextField txt_roomNoOfAdult = new TextField();
+		txt_roomNoOfAdult = new JTextField();
 		txt_roomNoOfAdult.setBounds(219, 170, 148, 22);
 
-		final TextField txt_roomNoOfChild = new TextField();
+		txt_roomNoOfChild = new JTextField();
 		txt_roomNoOfChild.setBounds(219, 198, 148, 22);
 
 		Label label_5 = new Label("roomNoOfChild");
 		label_5.setBounds(56, 198, 127, 22);
 
-		final TextField txt_roomFee = new TextField();
+		txt_roomFee = new JTextField();
 		txt_roomFee.setBounds(219, 226, 148, 22);
 
 		cb_roomStatusID = new JComboBox();
@@ -183,7 +195,7 @@ public class RoomFrom extends JInternalFrame {
 				txt_roomStatusID.setText(statusID.toString());
 			}
 		});
-		cb_roomStatusID.setBounds(258, 144, 109, 20);
+		cb_roomStatusID.setBounds(219, 142, 148, 22);
 		contentPane.add(cb_roomStatusID);
 
 
@@ -281,7 +293,6 @@ public class RoomFrom extends JInternalFrame {
 		contentPane.add(label_2);
 		contentPane.add(txt_roomName);
 		contentPane.add(label_3);
-		contentPane.add(txt_roomStatusID);
 		contentPane.add(label_4);
 		contentPane.add(txt_roomNoOfAdult);
 		contentPane.add(label_5);
@@ -309,18 +320,14 @@ public class RoomFrom extends JInternalFrame {
 		table.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				comboUpdate(txt_idroom, txt_Floor, txt_roomName,
-						txt_roomStatusID, txt_roomNoOfAdult, txt_roomNoOfChild,
-						txt_roomFee);		
+				comboUpdate();		
 			}
 		});
 		table.setBackground(new Color(255, 255, 153));
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				comboUpdate(txt_idroom, txt_Floor, txt_roomName,
-						txt_roomStatusID, txt_roomNoOfAdult, txt_roomNoOfChild,
-						txt_roomFee);			       			
+				comboUpdate();			       			
 			}
 		});
 
@@ -340,6 +347,25 @@ public class RoomFrom extends JInternalFrame {
 		});
 		btnNew.setBounds(40, 427, 78, 23);
 		contentPane.add(btnNew);	
+		
+				txt_roomStatusID = new JTextField();		
+				txt_roomStatusID.setEnabled(false);
+				txt_roomStatusID.setEditable(false);
+				
+						txt_roomStatusID.setBounds(219, 142, -22, 22);
+						contentPane.add(txt_roomStatusID);
+						
+						this.setClosable(true);
+						  this.setMaximizable(true);
+						  this.setVisible(true);
+
+						  this.setResizable(true);
+						  this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+						    
+						  showTable();
+							showCombo();		
+							table.selectAll();
+							comboUpdate();
 	}
 
 
@@ -380,24 +406,23 @@ public class RoomFrom extends JInternalFrame {
 
 	}
 
-	public void comboUpdate(final TextField txt_idroom,
-			final TextField txt_Floor, final TextField txt_roomName,
-			final TextField txt_roomStatusID,
-			final TextField txt_roomNoOfAdult,
-			final TextField txt_roomNoOfChild, final TextField txt_roomFee) {
+	public static void comboUpdate() {
 		int row = table.getSelectedRow();
 		txt_idroom.setText((String) table.getValueAt(row, 0));
 		txt_roomName.setText((String) table.getValueAt(row, 1));
 		txt_Floor.setText((String) table.getValueAt(row, 2));				
-		txt_roomStatusID.setText((String) table.getValueAt(row, 3));
+		txt_roomStatusID.setText(((String) table.getValueAt(row, 3)=="Available")? "1": "2");
 		txt_roomNoOfAdult.setText((String) table.getValueAt(row, 4));
 		txt_roomNoOfChild.setText((String) table.getValueAt(row, 5));
 		txt_roomFee.setText((String) table.getValueAt(row, 6));				
 
+		
 		ConnectData ds=new ConnectData();
 		ds.connect();			
 		String value = null;
-		String statusID = (String) table.getValueAt(row, 3);
+		String statusID = (((String) table.getValueAt(row, 3)).equals("Available")? "1": "2");
+		System.out.println((String) table.getValueAt(row, 3));	
+		System.out.println(statusID);
 		String newSQL="SELECT roomStatusName FROM RoomStatus where roomStatusID='" + statusID +"'"; 
 
 		try { 
