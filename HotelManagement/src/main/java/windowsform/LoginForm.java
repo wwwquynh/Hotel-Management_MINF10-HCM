@@ -86,6 +86,7 @@ void btnLogin_actionPerformed(ActionEvent e) {
   }
 
   void btnCancel_actionPerformed(ActionEvent e) {
+	  this.setVisible(false);
 	  desktop.remove(this);
   }
 

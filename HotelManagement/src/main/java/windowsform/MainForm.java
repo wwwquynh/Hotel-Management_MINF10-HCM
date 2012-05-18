@@ -90,7 +90,7 @@ public MDIDesktopPane desktop;
     getContentPane().setLayout(new BorderLayout());
     getContentPane().add(scrollPane, BorderLayout.CENTER);
 
-    //setMenuStatus(false);/////////////////////////////////////////////////////////////////
+    setMenuStatus(false);/////////////////////////////////////////////////////////////////
     addWindowListener(new WindowAdapter() {
       public void windowClosing(WindowEvent e) {
         System.exit(0);
@@ -195,6 +195,18 @@ public MDIDesktopPane desktop;
           
         }
       });
+    
+    miExit.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent ae) {
+        	//RoomFrom rsf = new RoomFrom(desktop, null);
+        	callDispose();
+          
+        }
+      });
+  }
+  
+  public void callDispose(){
+	  this.dispose();
   }
   public void callRoomStatus(){
 	  RoomStatusForm rsf = new RoomStatusForm(desktop, null);
