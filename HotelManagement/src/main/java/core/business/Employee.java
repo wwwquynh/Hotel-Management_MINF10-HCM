@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.JOptionPane;
+
 import connect.sqlite.ConnectData;
 
 public class Employee implements IEmployee{
@@ -168,5 +170,28 @@ public class Employee implements IEmployee{
 	
 	public static ResultSet searchEmployee(String empName){
 		return null;
+	}
+	
+	public static boolean login(String uname, String pass){
+		try {
+			
+			String sql = "select  * from Employee where empUserName = '" + uname + "' and empPassword = '" + pass + "'";
+			ConnectData conn = new ConnectData();
+			conn.connect();
+			ResultSet rs = conn.ExcuteQuery(sql);
+		
+			while(rs.next()){
+				JOptionPane.showMessageDialog(null, "Halo " + rs.getString("empName"));
+				return true;
+			}
+			JOptionPane.showMessageDialog(null, "Invalid username, password");
+			conn.dispose();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		return false;
 	}
 }

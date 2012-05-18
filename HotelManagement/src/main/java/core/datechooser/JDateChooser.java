@@ -27,14 +27,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
@@ -548,8 +546,8 @@ public class JDateChooser extends JPanel implements ActionListener,
 	 *            The command line arguments
 	 */
 	public static void main(String[] s) {
-		JFrame frame = new JFrame("JDateChooser");
-		JDateChooser dateChooser = new JDateChooser();
+		//JFrame frame = new JFrame("JDateChooser");
+		//JDateChooser dateChooser = new JDateChooser();
 		// JDateChooser dateChooser = new JDateChooser(null, new Date(), null,
 		// null);
 		// dateChooser.setLocale(new Locale("de"));

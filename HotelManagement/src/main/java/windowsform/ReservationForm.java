@@ -21,7 +21,9 @@ import java.awt.event.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ReservationForm extends JInternalFrame{
 
@@ -74,7 +76,7 @@ public class ReservationForm extends JInternalFrame{
   JTable tblReservation;// = new JTable();
   GridLayout gridLayout1 = new GridLayout();
   JButton btnSearch = new JButton();
-  JButton btnSave = new JButton();
+  JButton btn = new JButton();
   JButton btnNew = new JButton();
   JLabel jLabel12 = new JLabel();
   JTextField txtIDCardNumber = new JTextField();
@@ -106,6 +108,7 @@ public class ReservationForm extends JInternalFrame{
 	      this.isReservation = isReservation;
 	      this.resrvID = resrvID;
 		  jbInit();
+		  
 	      this.setClosable(true);
 	      this.setMaximizable(true);
 	      this.setVisible(true);
@@ -133,8 +136,28 @@ public class ReservationForm extends JInternalFrame{
 				  this.custID = rs.getInt("customerID");
 				  this.spNumOfAdult.setValue(rs.getInt("numberOfAdult"));
 				  this.spNumOfChild.setValue(rs.getInt("numberOfChild"));
-				  this.dateCheckin.setDate(rs.getDate("resDate"));
-				  this.dateCheckout.setDate(rs.getDate("resLeaveDate"));
+				  
+				  
+				  try {
+					  String dStrCheckin = rs.getString("resDate");
+					  DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//MM/dd/yyyy HH:mm:ss
+					Date dayCheckin = df.parse(dStrCheckin);
+					this.dateCheckin.setDate(dayCheckin);
+					
+					String dStrCheckout = rs.getString("resLeaveDate");
+					  DateFormat dfout = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//MM/dd/yyyy HH:mm:ss
+					Date dayCheckout = dfout.parse(dStrCheckout);
+					this.dateCheckout.setDate(dayCheckout);
+					
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				  
+				  //java.sql.Date dStr = rs.getDate("resDate");
+				  //Date d = new Date(dStr);
+				  
+				  
 				  this.txtTotalCost.setText(rs.getDouble("preTotalCost") + "");  
 				  roomID = rs.getInt("roomID");
 			  }
@@ -327,9 +350,10 @@ public class ReservationForm extends JInternalFrame{
     btnSearch.setToolTipText("");
     btnSearch.setText("Search");
     btnSearch.addActionListener(new ReservationForm_btnSearch_actionAdapter(this));
-    btnSave.setBounds(new Rectangle(336, 388, 66, 21));
-    btnSave.setText("Save");
-    btnSave.addActionListener(new ReservationForm_btnSave_actionAdapter(this));
+    btn.setBounds(new Rectangle(336, 390, 66, 21));
+    //////////////////xx
+    btn.setText(isReservation?"Save":"Checkin");
+    btn.addActionListener(new ReservationForm_btn_actionAdapter(this));
     btnNew.setBounds(new Rectangle(263, 390, 62, 21));
     btnNew.setText("New");
     btnNew.addActionListener(new ReservationForm_btnNew_actionAdapter(this));
@@ -382,7 +406,7 @@ public class ReservationForm extends JInternalFrame{
     jPanel1.add(jLabel2, null);
     jPanel1.add(jLabel12, null);
     jPanel1.add(txtIDCardNumber, null);
-    jPanel1.add(btnSave, null);
+    jPanel1.add(btn, null);
     jPanel1.add(btnNew, null);
     jPanel1.add(dateCheckin, null);
   }
@@ -436,7 +460,7 @@ public class ReservationForm extends JInternalFrame{
 //new- clear all
   }
 
-  void btnSave_actionPerformed(ActionEvent e) {
+  void btn_actionPerformed(ActionEvent e) {
 	  try{
 
 		  if(resrvID==0)//create res
@@ -561,14 +585,14 @@ class ReservationForm_btnNew_actionAdapter implements java.awt.event.ActionListe
   }
 }
 
-class ReservationForm_btnSave_actionAdapter implements java.awt.event.ActionListener {
+class ReservationForm_btn_actionAdapter implements java.awt.event.ActionListener {
   ReservationForm adaptee;
 
-  ReservationForm_btnSave_actionAdapter(ReservationForm adaptee) {
+  ReservationForm_btn_actionAdapter(ReservationForm adaptee) {
     this.adaptee = adaptee;
   }
   public void actionPerformed(ActionEvent e) {
-    adaptee.btnSave_actionPerformed(e);
+    adaptee.btn_actionPerformed(e);
   }
   
 }

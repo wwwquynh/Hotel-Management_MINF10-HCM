@@ -2,16 +2,17 @@ package windowsform;
 
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JButton;
+import javax.swing.WindowConstants;
 
 import core.business.ITask;
 
@@ -29,7 +30,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 @SuppressWarnings("serial")
-public class TaskForm extends JFrame implements ITask{
+public class TaskForm extends JInternalFrame implements ITask{
 
 	private JPanel contentPane;
 	private static JTextField txt_ID;
@@ -87,7 +88,12 @@ public class TaskForm extends JFrame implements ITask{
 	 * Create the frame.
 	 */
 	public TaskForm() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setClosable(true);
+		  this.setMaximizable(true);
+		  this.setVisible(true);
+		  this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		  this.setResizable(true);
+
 		setBounds(100, 100, 450, 330);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -176,6 +182,10 @@ public class TaskForm extends JFrame implements ITask{
 		lblTaskManager.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblTaskManager.setBounds(143, 11, 180, 32);
 		contentPane.add(lblTaskManager);
+		
+		showTable();
+		txt_ID.setText((String) table.getValueAt(0, 0));
+		txt_Name.setText((String) table.getValueAt(0, 1));
 	}
 	
 	// modify

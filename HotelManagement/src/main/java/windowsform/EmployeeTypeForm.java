@@ -1,11 +1,9 @@
 package windowsform;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -14,26 +12,33 @@ import javax.swing.JTextField;
 import java.awt.Font;
 import java.util.Vector;
 
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.WindowConstants;
 
 
 
-import connect.sqlite.ConnectData;
 import core.business.IEmployeeType;
-
+import connect.sqlite.ConnectData;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
-public class EmployeeTypeForm extends JFrame implements IEmployeeType {
+public class EmployeeTypeForm extends JInternalFrame implements IEmployeeType {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField txt_ID;
-	private JTextField txt_Name;
+	private static JTextField txt_ID;
+	private static JTextField txt_Name;
 	private static JTable table;
 
 	/**
@@ -41,7 +46,7 @@ public class EmployeeTypeForm extends JFrame implements IEmployeeType {
 	 */
 	
 	public static void showTable() {
-		Vector<String> rowHeader = new Vector (); 				
+		Vector<String> rowHeader = new Vector<String> (); 				
 		rowHeader.add ("empTypeID"); 
 		rowHeader.add ("empTypeName"); 
 		 		
@@ -52,9 +57,9 @@ public class EmployeeTypeForm extends JFrame implements IEmployeeType {
 		String newSQL="SELECT * FROM EmployeeType"; 
 		try { 
 			ResultSet rs =ds.ExcuteQuery(newSQL); 
-			Vector rowData; 				
+			Vector<String> rowData; 				
 			if (rs != null) while (rs.next()){ 
-				rowData = new Vector() ; 
+				rowData = new Vector<String>() ; 
 				rowData.add (rs.getString("empTypeID")); 
 				//rowData.add (String.valueOf(rs.getInt("roomName"))); 
 				rowData.add (rs.getString("empTypeName"));				 
@@ -71,6 +76,9 @@ public class EmployeeTypeForm extends JFrame implements IEmployeeType {
 					EmployeeTypeForm frame = new EmployeeTypeForm();
 					frame.setVisible(true);
 					showTable();
+					table.selectAll();
+					txt_ID.setText((String) table.getValueAt(0, 0));
+					txt_Name.setText((String) table.getValueAt(0, 1));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -82,7 +90,12 @@ public class EmployeeTypeForm extends JFrame implements IEmployeeType {
 	 * Create the frame.
 	 */
 	public EmployeeTypeForm() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setClosable(true);
+		  this.setMaximizable(true);
+		  this.setVisible(true);
+		  this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		  this.setResizable(true);
+
 		setBounds(100, 100, 450, 315);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -94,6 +107,7 @@ public class EmployeeTypeForm extends JFrame implements IEmployeeType {
 		contentPane.add(lblNewLabel);
 		
 		txt_ID = new JTextField();
+		txt_ID.setEditable(false);
 		txt_ID.setBounds(83, 71, 162, 20);
 		contentPane.add(txt_ID);
 		txt_ID.setColumns(10);
@@ -117,6 +131,15 @@ public class EmployeeTypeForm extends JFrame implements IEmployeeType {
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
+		scrollPane.setViewportView(table);
+		table.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				int row = table.getSelectedRow();
+				txt_ID.setText((String) table.getValueAt(row, 0));
+				txt_Name.setText((String) table.getValueAt(row, 1));
+			}
+		});
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -125,7 +148,6 @@ public class EmployeeTypeForm extends JFrame implements IEmployeeType {
 				txt_Name.setText((String) table.getValueAt(row, 1));
 			}
 		});
-		scrollPane.setColumnHeaderView(table);
 		
 		JButton btnNew = new JButton("New");
 		btnNew.addActionListener(new ActionListener() {
@@ -167,6 +189,10 @@ public class EmployeeTypeForm extends JFrame implements IEmployeeType {
 		});
 		btnDelete.setBounds(343, 247, 89, 23);
 		contentPane.add(btnDelete);
+		
+		table.selectAll();
+		txt_ID.setText((String) table.getValueAt(0, 0));
+		txt_Name.setText((String) table.getValueAt(0, 1));
 	}
 	@Override
 	public boolean addEmp() {

@@ -1,3 +1,4 @@
+package windowsform;
 import java.awt.BorderLayout;
 
 import java.awt.event.ActionEvent;
@@ -22,13 +23,6 @@ import javax.swing.event.MenuListener;
 
 import core.formcontroller.*;
 
-import windowsform.AssignTaskForm;
-import windowsform.CustomerFrom;
-import windowsform.EmployeeForm;
-import windowsform.LoginForm;
-import windowsform.ReservationForm;
-import windowsform.RoomFrom;
-import windowsform.RoomStatusForm;
 
 public class MainForm extends JFrame {
 
@@ -53,13 +47,16 @@ public MDIDesktopPane desktop;
   JMenuItem miRoom = new JMenuItem("Room");
   JMenuItem miEmployee = new JMenuItem("Employee");
   JMenuItem miTask = new JMenuItem("Task");
+  JMenuItem miService = new JMenuItem("Service");
   
   JMenuItem miCustomer = new JMenuItem("Customer");
   JMenuItem miReservation = new JMenuItem("Reservation");
   JMenuItem miRoomStatus = new JMenuItem("Room Status");
   JMenuItem miAssignTask = new JMenuItem("Assign Task");
+  JMenuItem miEmpType = new JMenuItem("Employee Type");
   
   private JMenuItem testForm = new JMenuItem("testForm");
+  
   
   //private JMenuItem 
   private JScrollPane scrollPane = new JScrollPane();
@@ -78,7 +75,9 @@ public MDIDesktopPane desktop;
     mnuMasterData.add(miHotel);
     mnuMasterData.add(miRoom);
     mnuMasterData.add(miEmployee);
+    //mnuMasterData.add(miEmpType);
     mnuMasterData.add(miTask);
+    mnuMasterData.add(miService);
     
     mnuManagement.add(miCustomer);
     mnuManagement.add(miReservation);
@@ -91,6 +90,7 @@ public MDIDesktopPane desktop;
     getContentPane().setLayout(new BorderLayout());
     getContentPane().add(scrollPane, BorderLayout.CENTER);
 
+    //setMenuStatus(false);/////////////////////////////////////////////////////////////////
     addWindowListener(new WindowAdapter() {
       public void windowClosing(WindowEvent e) {
         System.exit(0);
@@ -102,11 +102,10 @@ public MDIDesktopPane desktop;
           desktop.add(fct);
         }
       });
-    
+   
     miLogin.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent ae) {
-        	LoginForm fct = new LoginForm();
-          desktop.add(fct); 
+        	callLoginForm();
         }
       });
     
@@ -120,9 +119,7 @@ public MDIDesktopPane desktop;
     
     miRoomStatus.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent ae) {
-        	RoomStatusForm rsf = new RoomStatusForm(desktop, null);
-        	
-          desktop.add(rsf);
+        	callRoomStatus();
           
         }
       });
@@ -167,18 +164,57 @@ public MDIDesktopPane desktop;
         public void actionPerformed(ActionEvent ae) {
         	//RoomFrom rsf = new RoomFrom(desktop, null);
         	EmployeeForm rsf = new EmployeeForm();
-        	
+        	desktop.add(rsf);
+          
+        }
+      });
+    
+    miService.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent ae) {
+        	//RoomFrom rsf = new RoomFrom(desktop, null);
+        	ServiceForm rsf = new ServiceForm();
         	desktop.add(rsf);
           
         }
       });
 
+    miTask.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent ae) {
+        	//RoomFrom rsf = new RoomFrom(desktop, null);
+        	TaskForm rsf = new TaskForm();
+        	desktop.add(rsf);
+          
+        }
+      });
+    
+    miEmpType.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent ae) {
+        	//RoomFrom rsf = new RoomFrom(desktop, null);
+        	EmployeeTypeForm rsf = new EmployeeTypeForm();
+        	desktop.add(rsf);
+          
+        }
+      });
   }
-
+  public void callRoomStatus(){
+	  RoomStatusForm rsf = new RoomStatusForm(desktop, null);
+  		desktop.add(rsf);
+  }
+  private void callLoginForm(){
+  	LoginForm fct = new LoginForm(desktop, this);
+      desktop.add(fct); 
+  }
+  public void setMenuStatus(boolean arg0){
+	  this.mnuMasterData.setEnabled(arg0);
+	  this.mnuManagement.setEnabled(arg0);
+	  this.mnuReport.setEnabled(arg0);
+  }
   public static void main(String[] args) {
 	  MainForm main = new MainForm();
     main.setSize(1024, 768);
     main.setVisible(true);
+    
+    
   }
 
 }

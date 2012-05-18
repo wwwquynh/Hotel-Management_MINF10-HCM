@@ -11,6 +11,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.JInternalFrame;
@@ -19,11 +23,14 @@ import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JButton;
+import javax.swing.WindowConstants;
 
-import connect.sqlite.ConnectData;
 import core.business.KeyValue;
-
+import core.datechooser.JDateChooser;
+import connect.sqlite.ConnectData;
 import javax.swing.JComboBox;
+
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -42,7 +49,8 @@ public class AssignTaskForm extends JInternalFrame {
 	private static JTextField txt_taskID;
 	private static JTextField txt_emp;
 	private static JTable table;
-	private static JTextField txt_Date;
+	//private static JTextField txt_Date;
+	private static core.datechooser.JDateChooser txt_Date;
 	private static JComboBox cb_task;
 	private static JComboBox cb_emp;
 	
@@ -76,25 +84,29 @@ public class AssignTaskForm extends JInternalFrame {
 	
 	//
 	public static void showTable() {
-		Vector<String> rowHeader = new Vector (); 				
+		Vector<String> rowHeader = new Vector<String> (); 				
 		rowHeader.add ("assignTaskID"); 
 		rowHeader.add ("taskID"); 
 		rowHeader.add ("empID");	 
 		rowHeader.add ("assignTaskDate");
+		rowHeader.add ("taskName");
+		rowHeader.add ("empName");
 		DefaultTableModel model = new DefaultTableModel(rowHeader,0);				
 		table.setModel(model); 				
 		ConnectData ds=new ConnectData();
 		ds.connect();			
-		String newSQL="SELECT * FROM AssignTask"; 
+		String newSQL="SELECT at.assignTaskID, at.taskID, at.empID, at.assignTaskDate, t.taskName, e.empName FROM AssignTask at join Task t on at.taskID = t.taskID join Employee e on e.empID = at.empID"; 
 		try { 
 			ResultSet rs =ds.ExcuteQuery(newSQL); 
-			Vector rowData; 				
+			Vector<String> rowData; 				
 			if (rs != null) while (rs.next()){ 
-				rowData = new Vector() ; 
+				rowData = new Vector<String>() ; 
 				rowData.add (rs.getString("assignTaskID")); 
 				rowData.add (rs.getString("taskID"));
 				rowData.add (rs.getString("empID")); 
-				rowData.add (rs.getString("assignTaskDate"));				
+				rowData.add (rs.getString("assignTaskDate"));	
+				rowData.add (rs.getString("taskName"));	
+				rowData.add (rs.getString("empName"));	
 				model.addRow(rowData); 
 			} 
 
@@ -154,6 +166,7 @@ public class AssignTaskForm extends JInternalFrame {
 		txt_ID.setBounds(112, 40, 89, 20);
 		contentPane.add(txt_ID);
 		txt_ID.setColumns(10);
+		txt_ID.setVisible(false);
 		
 		txt_taskID = new JTextField();
 		txt_taskID.setEditable(false);
@@ -161,11 +174,13 @@ public class AssignTaskForm extends JInternalFrame {
 		txt_taskID.setBounds(112, 78, 89, 20);
 		contentPane.add(txt_taskID);
 		txt_taskID.setColumns(10);
-		
+		txt_taskID.setVisible(false);
 		txt_emp = new JTextField();
 		txt_emp.setEditable(false);
 		txt_emp.setBounds(112, 114, 89, 20);
 		contentPane.add(txt_emp);
+		txt_emp.setVisible(false);
+		
 		txt_emp.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();		
@@ -194,7 +209,8 @@ public class AssignTaskForm extends JInternalFrame {
 				txt_ID.setText("");
 				txt_taskID.setText("");
 				txt_emp.setText("");
-				txt_Date.setText("");
+				//txt_Date.setText("");
+				txt_Date.setDate(null);
 			}
 		});
 		btnNew.setBounds(22, 364, 89, 23);
@@ -254,10 +270,22 @@ public class AssignTaskForm extends JInternalFrame {
 		lblDate.setBounds(28, 156, 46, 14);
 		contentPane.add(lblDate);
 		
-		txt_Date = new JTextField();
-		txt_Date.setBounds(112, 153, 89, 20);
+		//txt_Date = new JTextField();
+		txt_Date = new JDateChooser();
+		txt_Date.setBounds(112, 153, 109, 20);
 		contentPane.add(txt_Date);
-		txt_Date.setColumns(10);
+		//txt_Date.setColumns(10);
+		
+		this.setClosable(true);
+		  this.setMaximizable(true);
+		  this.setVisible(true);
+		  this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		  this.setResizable(true);
+		  
+		  showTable();
+			showCombo();					
+			table.selectAll();
+			updateField();
 	}
 	
 	public boolean addEmp() {
@@ -267,8 +295,12 @@ public class AssignTaskForm extends JInternalFrame {
 		ds.connect();						
 		String task=txt_taskID.getText();
 		String emp = txt_emp.getText();
-		String date = txt_Date.getText();				
-
+		//String date = txt_Date.getText();		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		 
+	      String date = dateFormat.format(txt_Date.getDate());
+	      
+		//String date = txt_Date.getDate().toString();
 		String sql_insert="insert into AssignTask values("+ null +",'"+task+ "','"+emp+"','"+date+"')";
 		if(ds.queryExcuteUpdate(sql_insert))
 		{
@@ -297,7 +329,13 @@ public class AssignTaskForm extends JInternalFrame {
 		int id= Integer.parseInt(txt_ID.getText());
 		String task=txt_taskID.getText();
 		String emp = txt_emp.getText();
-		String date = txt_Date.getText();	
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		 
+	      String date = dateFormat.format(txt_Date.getDate());
+	      
+		//String date = txt_Date.getDate().toString();
+		
 		String sql_insert="Update AssignTask Set assignTaskID="+id+",taskID='"+task+"',empID='"+emp+"',assignTaskDate='"+date+ "' where assignTaskID='" + id +"'" ;
 		if(ds.queryExcuteUpdate(sql_insert))					
 		{
@@ -348,8 +386,21 @@ public class AssignTaskForm extends JInternalFrame {
 		txt_ID.setText((String) table.getValueAt(row, 0));
 		txt_taskID.setText((String) table.getValueAt(row, 1));
 		txt_emp.setText((String) table.getValueAt(row, 2));
-		txt_Date.setText((String) table.getValueAt(row, 3));
-						
+		//txt_Date.setText((String) table.getValueAt(row, 3));
+		String dStrCheckin = (String) table.getValueAt(row, 3);
+		  DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//MM/dd/yyyy HH:mm:ss
+		try {
+			
+			Date dayCheckin = df.parse(dStrCheckin);
+			txt_Date.setDate(dayCheckin);	
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
 		ConnectData ds=new ConnectData();
 		ds.connect();			
 		String value = null;				

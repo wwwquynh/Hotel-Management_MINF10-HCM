@@ -19,16 +19,18 @@ import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.WindowConstants;
 
-import connect.sqlite.ConnectData;
 import core.business.IEmployeeType;
 import core.business.KeyValue;
-
+import connect.sqlite.ConnectData;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JComboBox;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class EmployeeForm extends JInternalFrame implements IEmployeeType {
 
@@ -37,14 +39,14 @@ public class EmployeeForm extends JInternalFrame implements IEmployeeType {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField txt_ID;
-	private JTextField txt_Name;
-	private JTextField txt_Address;
-	private JTextField txt_Phone;
-	private JTextField txt_Date;
-	private JTextField txt_Type;
-	private JTextField txt_UserName;
-	private JTextField txt_PassWord;
+	private static JTextField txt_ID;
+	private static JTextField txt_Name;
+	private static JTextField txt_Address;
+	private static JTextField txt_Phone;
+	private static JTextField txt_Date;
+	private static JTextField txt_Type;
+	private static JTextField txt_UserName;
+	private static JTextField txt_PassWord;
 	private JScrollPane scrollPane;
 	private JButton btnNew;
 	private JButton btnAdd;
@@ -58,7 +60,7 @@ public class EmployeeForm extends JInternalFrame implements IEmployeeType {
 	/**
 	 * Launch the application.
 	 */
-	@SuppressWarnings("unchecked")
+
 	public static void showTable() {
 		Vector<String> rowHeader = new Vector<String> (); 				
 		rowHeader.add ("empID"); 
@@ -69,7 +71,6 @@ public class EmployeeForm extends JInternalFrame implements IEmployeeType {
 		rowHeader.add ("empTypeID"); 
 		rowHeader.add ("empUserName"); 
 		rowHeader.add ("empPassword"); 
-
 		DefaultTableModel model = new DefaultTableModel(rowHeader,0);				
 		table.setModel(model); 				
 		ConnectData ds=new ConnectData();
@@ -77,11 +78,10 @@ public class EmployeeForm extends JInternalFrame implements IEmployeeType {
 		String newSQL="SELECT * FROM Employee"; 
 		try { 
 			ResultSet rs =ds.ExcuteQuery(newSQL); 
-			Vector rowData; 				
+			Vector<String> rowData; 				
 			if (rs != null) while (rs.next()){ 
-				rowData = new Vector() ; 
+				rowData = new Vector<String>() ; 
 				rowData.add (rs.getString("empID")); 
-				//rowData.add (String.valueOf(rs.getInt("roomName"))); 
 				rowData.add (rs.getString("empName"));	
 				rowData.add (rs.getString("empAddress"));
 				rowData.add (rs.getString("empPhone"));
@@ -120,6 +120,8 @@ public class EmployeeForm extends JInternalFrame implements IEmployeeType {
 					frame.setVisible(true);
 					showTable();
 					showCombo();
+					table.selectAll();
+					updateField();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -131,10 +133,15 @@ public class EmployeeForm extends JInternalFrame implements IEmployeeType {
 	 * Create the frame.
 	 */
 	public EmployeeForm() {
+		this.setClosable(true);
+		  this.setMaximizable(true);
+		  this.setVisible(true);
+		  this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		  this.setResizable(true);
 		getContentPane().setLayout(null);
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, 553, 523);
+
+		setBounds(0, 0, 553, 554);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -150,6 +157,7 @@ public class EmployeeForm extends JInternalFrame implements IEmployeeType {
 		contentPane.add(lblId);
 
 		txt_ID = new JTextField();
+		txt_ID.setEditable(false);
 		txt_ID.setBounds(112, 66, 86, 20);
 		contentPane.add(txt_ID);
 		txt_ID.setColumns(10);
@@ -219,50 +227,24 @@ public class EmployeeForm extends JInternalFrame implements IEmployeeType {
 		txt_PassWord.setColumns(10);
 
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 313, 530, 118);
+		scrollPane.setBounds(10, 325, 530, 138);
 		contentPane.add(scrollPane);
-
-		table = new JTable();
-		table.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				int row = table.getSelectedRow();
-				txt_ID.setText((String) table.getValueAt(row, 0));
-				txt_Name.setText((String) table.getValueAt(row, 1));
-				txt_Address.setText((String) table.getValueAt(row, 2));
-				txt_Phone.setText((String) table.getValueAt(row, 3));
-				txt_Date.setText((String) table.getValueAt(row, 4));
-				txt_Type.setText((String) table.getValueAt(row, 5));
-				txt_UserName.setText((String) table.getValueAt(row, 6));
-				txt_PassWord.setText((String) table.getValueAt(row, 7));				
-				ConnectData ds=new ConnectData();
-				ds.connect();			
-				String value = null;
-				
-				String ID = (String) table.getValueAt(row, 5);
-				String newSQL="SELECT empTypeName FROM EmployeeType where empTypeID='" + ID +"'"; 
-
-				try { 
-					ResultSet rs =ds.ExcuteQuery(newSQL); 						
-					if (rs != null) {
-						value = (String)rs.getString("empTypeName");						
-					} 
-					rs.close(); ds.dispose(); 
-				} catch(Exception ex){System.out.println("Error : " + ex);}
-
-
-				int a=0;
-				for (int i=0; i<comboBox.getItemCount(); i++){
-					if(((KeyValue)comboBox.getItemAt(i)).getValue().equals(value))
-					{
-						a=i;
-						break;
+		
+				table = new JTable();
+				scrollPane.setViewportView(table);
+				table.addKeyListener(new KeyAdapter() {
+					@Override
+					public void keyPressed(KeyEvent arg0) {
+						updateField();	
 					}
-				}
-				comboBox.setSelectedIndex(a);				
-			}
-		});
-		scrollPane.setColumnHeaderView(table);
+				});
+				table.setFillsViewportHeight(true);
+				table.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent arg0) {
+						updateField();				
+					}
+				});
 
 		btnNew = new JButton("New");
 		btnNew.addActionListener(new ActionListener() {
@@ -277,7 +259,7 @@ public class EmployeeForm extends JInternalFrame implements IEmployeeType {
 				txt_PassWord.setText("");
 			}
 		});
-		btnNew.setBounds(10, 455, 89, 23);
+		btnNew.setBounds(10, 474, 89, 23);
 		contentPane.add(btnNew);
 
 		btnAdd = new JButton("Add");
@@ -287,7 +269,7 @@ public class EmployeeForm extends JInternalFrame implements IEmployeeType {
 				showTable();
 			}
 		});
-		btnAdd.setBounds(160, 455, 89, 23);
+		btnAdd.setBounds(168, 474, 89, 23);
 		contentPane.add(btnAdd);
 
 		btnUpdate = new JButton("Update");
@@ -297,7 +279,7 @@ public class EmployeeForm extends JInternalFrame implements IEmployeeType {
 				showTable();
 			}
 		});
-		btnUpdate.setBounds(298, 455, 89, 23);
+		btnUpdate.setBounds(298, 474, 89, 23);
 		contentPane.add(btnUpdate);
 
 		btnDelete = new JButton("Delete");
@@ -307,7 +289,7 @@ public class EmployeeForm extends JInternalFrame implements IEmployeeType {
 				showTable();
 			}
 		});
-		btnDelete.setBounds(438, 455, 89, 23);
+		btnDelete.setBounds(441, 474, 89, 23);
 		contentPane.add(btnDelete);
 		// asign click b
 		comboBox = new JComboBox();
@@ -319,6 +301,11 @@ public class EmployeeForm extends JInternalFrame implements IEmployeeType {
 		});
 		comboBox.setBounds(168, 223, 171, 20);
 		contentPane.add(comboBox);
+		
+		showTable();
+		showCombo();
+		table.selectAll();
+		updateField();
 	}
 	@Override
 	public boolean addEmp() {
@@ -411,5 +398,42 @@ public class EmployeeForm extends JInternalFrame implements IEmployeeType {
 			e1.printStackTrace();
 		}
 		return false;
+	}
+
+	private static void updateField() {
+		int row = table.getSelectedRow();
+		txt_ID.setText((String) table.getValueAt(row, 0));
+		txt_Name.setText((String) table.getValueAt(row, 1));
+		txt_Address.setText((String) table.getValueAt(row, 2));
+		txt_Phone.setText((String) table.getValueAt(row, 3));
+		txt_Date.setText((String) table.getValueAt(row, 4));
+		txt_Type.setText((String) table.getValueAt(row, 5));
+		txt_UserName.setText((String) table.getValueAt(row, 6));
+		txt_PassWord.setText((String) table.getValueAt(row, 7));				
+		ConnectData ds=new ConnectData();
+		ds.connect();			
+		String value = null;
+		
+		String ID = (String) table.getValueAt(row, 5);
+		String newSQL="SELECT empTypeName FROM EmployeeType where empTypeID='" + ID +"'"; 
+
+		try { 
+			ResultSet rs =ds.ExcuteQuery(newSQL); 						
+			if (rs != null) {
+				value = (String)rs.getString("empTypeName");						
+			} 
+			rs.close(); ds.dispose(); 
+		} catch(Exception ex){System.out.println("Error : " + ex);}
+
+
+		int a=0;
+		for (int i=0; i<comboBox.getItemCount(); i++){
+			if(((KeyValue)comboBox.getItemAt(i)).getValue().equals(value))
+			{
+				a=i;
+				break;
+			}
+		}
+		comboBox.setSelectedIndex(a);
 	}
 }

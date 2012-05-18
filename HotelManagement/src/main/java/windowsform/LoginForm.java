@@ -1,6 +1,10 @@
 package windowsform;
 
 import javax.swing.*;
+
+import core.business.Employee;
+import core.formcontroller.MDIDesktopPane;
+
 import java.awt.*;
 
 import java.awt.event.*;
@@ -27,10 +31,13 @@ JPanel jPanel1 = new JPanel();
   JPasswordField tfPassword = new JPasswordField();
   JButton btnLogin = new JButton();
   JButton btnCancel = new JButton();
-
-  public LoginForm() {
+  MDIDesktopPane desktop;
+  JFrame owner;
+  public LoginForm(MDIDesktopPane desktop, JFrame owner) {
     try {
-      jbInit();
+    	this.desktop = desktop;
+      this.owner = owner;
+    	jbInit();
       this.setClosable(true);
       this.setVisible(true);
     }
@@ -63,14 +70,23 @@ JPanel jPanel1 = new JPanel();
     tfUsername.setText("");
     tfPassword.setText("");
     this.setSize(new Dimension(311, 174));
+    this.getRootPane().setDefaultButton(btnLogin);
   }
 
-  void btnLogin_actionPerformed(ActionEvent e) {
-
+  @SuppressWarnings("deprecation")
+void btnLogin_actionPerformed(ActionEvent e) {
+	  if(Employee.login(this.tfUsername.getText(), this.tfPassword.getText()))
+	  {
+		  ((MainForm)owner).setMenuStatus(true);
+		  ((MainForm)owner).callRoomStatus();
+		  this.setVisible(false);
+		  
+		  desktop.remove(this);
+	  }
   }
 
   void btnCancel_actionPerformed(ActionEvent e) {
-
+	  desktop.remove(this);
   }
 
 }
